@@ -15,7 +15,7 @@
 	const navigation = [
 		{
 			name: 'Dashboard',
-			href: '/',
+			href: '/dashboard',
 			icon: 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z M3 7l9-4 9 4M5 10v10a1 1 0 001 1h3m0-11v11m0-11h4m-4 11h4m0-11v11a1 1 0 001-1h3'
 		},
 		{
@@ -74,7 +74,7 @@
 				</label>
 			</div>
 			<div class="mx-2 flex-1 px-2">
-				<div class="flex items-center">
+				<button class="flex items-center" onclick={() => handleNavigation('/')}>
 					<div class="mr-3 flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
 						<svg class="h-5 w-5 text-primary-content" fill="currentColor" viewBox="0 0 20 20">
 							<path
@@ -85,7 +85,7 @@
 						</svg>
 					</div>
 					<span class="text-lg font-bold">SecureOps</span>
-				</div>
+				</button>
 			</div>
 			<div class="flex-none">
 				<div class="dropdown dropdown-end">
