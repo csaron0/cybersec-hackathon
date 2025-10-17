@@ -210,69 +210,55 @@
 	<title>Ransomware Incident Report</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gray-50 py-8">
-	<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-		<!-- Header -->
-		<div class="mb-6 rounded-lg bg-white p-6 shadow-sm">
-			<div class="mb-4 flex items-center">
-				<div class="mr-4 flex h-12 w-12 items-center justify-center rounded-lg bg-red-100">
-					<svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-						></path>
-					</svg>
-				</div>
-				<div>
-					<h1 class="text-3xl font-bold text-gray-900">Ransomware Incident Report</h1>
-					<p class="mt-1 text-gray-600">
-						Please provide detailed information about the ransomware incident
-					</p>
-				</div>
+<!-- Header -->
+<div class="card bg-base-100 shadow-xl mb-6">
+	<div class="card-body">
+		<div class="flex items-center mb-4">
+			<div class="w-12 h-12 bg-error/20 rounded-lg flex items-center justify-center mr-4">
+				<svg class="w-6 h-6 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+				</svg>
 			</div>
-			<div class="rounded-md border border-red-200 bg-red-50 p-4">
-				<div class="flex">
-					<svg class="mt-0.5 mr-2 h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-						<path
-							fill-rule="evenodd"
-							d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-							clip-rule="evenodd"
-						></path>
-					</svg>
-					<div class="text-sm text-red-700">
-						<p>
-							<strong>Important:</strong> This form helps collect critical information for incident response.
-							Please be as detailed and accurate as possible.
-						</p>
-					</div>
-				</div>
+			<div>
+				<h1 class="text-3xl font-bold">Ransomware Incident Report</h1>
+				<p class="text-base-content/70 mt-1">
+											Please provide detailed information about the ransomware incident
+				</p>
 			</div>
 		</div>
+		<div class="alert alert-error">
+			<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+				<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+			</svg>
+			<div>
+				<p><strong>Important:</strong> This form helps collect critical information for incident response. Please be as detailed and accurate as possible.</p>
+			</div>
+		</div>
+	</div>
+</div>
 
-		<!-- Form -->
-		<form on:submit|preventDefault={handleSubmit} class="space-y-6">
-			{#each questions as question, index}
-				<div class="rounded-lg bg-white p-6 shadow-sm">
-					<div class="mb-4">
-						<label for={question.id} class="mb-2 block text-lg font-semibold text-gray-900">
-							{index + 1}. {question.title}
-							{#if question.required}
-								<span class="text-red-500">*</span>
-							{/if}
-						</label>
-						<p class="mb-4 text-sm text-gray-600">{question.description}</p>
-					</div>
+<!-- Form -->
+<form on:submit|preventDefault={handleSubmit} class="space-y-6">
 
-					<div class="space-y-2">
+	{#each questions as question, index}
+		<div class="card bg-base-100 shadow-xl">
+			<div class="card-body">
+				<h3 class="card-title text-lg">
+					{index + 1}. {question.title}
+					{#if question.required}
+						<span class="text-error">*</span>
+					{/if}
+				</h3>
+				<p class="text-base-content/70 mb-4">{question.description}</p>
+				
+				<div class="form-control w-full">
 						{#if question.type === 'text'}
 							<input
 								id={question.id}
 								type="text"
 								bind:value={question.answer}
 								required={question.required}
-								class="w-full rounded-md border border-gray-300 px-4 py-2 transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+								class="input input-bordered w-full"
 								placeholder="Enter your answer..."
 							/>
 						{:else if question.type === 'textarea'}
@@ -281,7 +267,7 @@
 								bind:value={question.answer}
 								required={question.required}
 								rows="4"
-								class="resize-vertical w-full rounded-md border border-gray-300 px-4 py-2 transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+								class="textarea textarea-bordered w-full"
 								placeholder="Provide detailed information..."
 							></textarea>
 						{:else if question.type === 'select'}
@@ -289,7 +275,7 @@
 								id={question.id}
 								bind:value={question.answer}
 								required={question.required}
-								class="w-full rounded-md border border-gray-300 px-4 py-2 transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+								class="select select-bordered w-full"
 							>
 								<option value="">Select an option...</option>
 								{#each question.options || [] as option}
@@ -299,31 +285,31 @@
 						{:else if question.type === 'radio'}
 							<div class="space-y-3">
 								{#each question.options || [] as option}
-									<label class="flex items-center">
+									<label class="label cursor-pointer justify-start">
 										<input
 											type="radio"
 											name={question.id}
 											value={option}
 											bind:group={question.answer}
 											required={question.required}
-											class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+											class="radio radio-primary mr-3"
 										/>
-										<span class="ml-3 text-gray-700">{option}</span>
+										<span class="label-text">{option}</span>
 									</label>
 								{/each}
 							</div>
 						{:else if question.type === 'checkbox'}
 							<div class="space-y-3">
 								{#each question.options || [] as option}
-									<label class="flex items-center">
+									<label class="label cursor-pointer justify-start">
 										<input
 											type="checkbox"
 											checked={Array.isArray(question.answer) && question.answer.includes(option)}
 											on:change={(e) =>
 												handleCheckboxChange(question.id, option, e.currentTarget.checked)}
-											class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+											class="checkbox checkbox-primary mr-3"
 										/>
-										<span class="ml-3 text-gray-700">{option}</span>
+										<span class="label-text">{option}</span>
 									</label>
 								{/each}
 							</div>
@@ -333,7 +319,7 @@
 								type="date"
 								bind:value={question.answer}
 								required={question.required}
-								class="w-full rounded-md border border-gray-300 px-4 py-2 transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+								class="input input-bordered w-full"
 							/>
 						{:else if question.type === 'datetime-local'}
 							<input
@@ -341,7 +327,7 @@
 								type="datetime-local"
 								bind:value={question.answer}
 								required={question.required}
-								class="w-full rounded-md border border-gray-300 px-4 py-2 transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+								class="input input-bordered w-full"
 							/>
 						{/if}
 					</div>
