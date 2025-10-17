@@ -1,8 +1,7 @@
-<script>
-	import { redirect } from '@sveltejs/kit';
-
+<script lang="ts">
+	let email: string = '';
 	function login() {
-		localStorage.setItem('email', 'true');
+		localStorage.setItem('email', email);
         window.location.href = '/';
 	}
 </script>
@@ -12,10 +11,10 @@
 		<legend class="fieldset-legend">Login</legend>
 
 		<label class="label">Email</label>
-		<input type="email" class="input" placeholder="Email" required />
+		<input type="email" class="input" placeholder="Email" bind:value={email} />
 
 		<label class="label">Password</label>
-		<input type="password" class="input" placeholder="Password" required />
+		<input type="password" class="input" placeholder="Password" />
 
 		<button type="submit" class="btn mt-4 btn-neutral">Login</button>
 	</fieldset>
