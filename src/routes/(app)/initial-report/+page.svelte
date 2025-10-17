@@ -211,27 +211,39 @@
 </svelte:head>
 
 <!-- Header -->
-<div class="card bg-base-100 shadow-xl mb-6">
+<div class="card mb-6 bg-base-100 shadow-xl">
 	<div class="card-body">
-		<div class="flex items-center mb-4">
-			<div class="w-12 h-12 bg-error/20 rounded-lg flex items-center justify-center mr-4">
-				<svg class="w-6 h-6 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+		<div class="mb-4 flex items-center">
+			<div class="mr-4 flex h-12 w-12 items-center justify-center rounded-lg bg-error/20">
+				<svg class="h-6 w-6 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+					></path>
 				</svg>
 			</div>
 			<div>
 				<h1 class="text-3xl font-bold">Ransomware Incident Report</h1>
-				<p class="text-base-content/70 mt-1">
-											Please provide detailed information about the ransomware incident
+				<p class="mt-1 text-base-content/70">
+					Please provide detailed information about the ransomware incident
 				</p>
 			</div>
 		</div>
 		<div class="alert alert-error">
-			<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-				<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+			<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+				<path
+					fill-rule="evenodd"
+					d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+					clip-rule="evenodd"
+				></path>
 			</svg>
 			<div>
-				<p><strong>Important:</strong> This form helps collect critical information for incident response. Please be as detailed and accurate as possible.</p>
+				<p>
+					<strong>Important:</strong> This form helps collect critical information for incident response.
+					Please be as detailed and accurate as possible.
+				</p>
 			</div>
 		</div>
 	</div>
@@ -239,7 +251,6 @@
 
 <!-- Form -->
 <form on:submit|preventDefault={handleSubmit} class="space-y-6">
-
 	{#each questions as question, index}
 		<div class="card bg-base-100 shadow-xl">
 			<div class="card-body">
@@ -249,144 +260,137 @@
 						<span class="text-error">*</span>
 					{/if}
 				</h3>
-				<p class="text-base-content/70 mb-4">{question.description}</p>
-				
+				<p class="mb-4 text-base-content/70">{question.description}</p>
+
 				<div class="form-control w-full">
-						{#if question.type === 'text'}
-							<input
-								id={question.id}
-								type="text"
-								bind:value={question.answer}
-								required={question.required}
-								class="input input-bordered w-full"
-								placeholder="Enter your answer..."
-							/>
-						{:else if question.type === 'textarea'}
-							<textarea
-								id={question.id}
-								bind:value={question.answer}
-								required={question.required}
-								rows="4"
-								class="textarea textarea-bordered w-full"
-								placeholder="Provide detailed information..."
-							></textarea>
-						{:else if question.type === 'select'}
-							<select
-								id={question.id}
-								bind:value={question.answer}
-								required={question.required}
-								class="select select-bordered w-full"
-							>
-								<option value="">Select an option...</option>
-								{#each question.options || [] as option}
-									<option value={option}>{option}</option>
-								{/each}
-							</select>
-						{:else if question.type === 'radio'}
-							<div class="space-y-3">
-								{#each question.options || [] as option}
-									<label class="label cursor-pointer justify-start">
-										<input
-											type="radio"
-											name={question.id}
-											value={option}
-											bind:group={question.answer}
-											required={question.required}
-											class="radio radio-primary mr-3"
-										/>
-										<span class="label-text">{option}</span>
-									</label>
-								{/each}
-							</div>
-						{:else if question.type === 'checkbox'}
-							<div class="space-y-3">
-								{#each question.options || [] as option}
-									<label class="label cursor-pointer justify-start">
-										<input
-											type="checkbox"
-											checked={Array.isArray(question.answer) && question.answer.includes(option)}
-											on:change={(e) =>
-												handleCheckboxChange(question.id, option, e.currentTarget.checked)}
-											class="checkbox checkbox-primary mr-3"
-										/>
-										<span class="label-text">{option}</span>
-									</label>
-								{/each}
-							</div>
-						{:else if question.type === 'date'}
-							<input
-								id={question.id}
-								type="date"
-								bind:value={question.answer}
-								required={question.required}
-								class="input input-bordered w-full"
-							/>
-						{:else if question.type === 'datetime-local'}
-							<input
-								id={question.id}
-								type="datetime-local"
-								bind:value={question.answer}
-								required={question.required}
-								class="input input-bordered w-full"
-							/>
-						{/if}
-					</div>
-				</div>
-			{/each}
-
-			<!-- Submit section -->
-			<div class="rounded-lg bg-white p-6 shadow-sm">
-				{#if submitMessage}
-					<div
-						class="mb-4 rounded-md p-4 {submitMessage.includes('Error')
-							? 'border border-red-200 bg-red-50 text-red-700'
-							: submitMessage.includes('fill in')
-								? 'border border-yellow-200 bg-yellow-50 text-yellow-700'
-								: 'border border-green-200 bg-green-50 text-green-700'}"
-					>
-						{submitMessage}
-					</div>
-				{/if}
-
-				<button
-					type="submit"
-					disabled={isSubmitting}
-					class="flex w-full items-center justify-center rounded-md bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-				>
-					{#if isSubmitting}
-						<svg
-							class="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
+					{#if question.type === 'text'}
+						<input
+							id={question.id}
+							type="text"
+							bind:value={question.answer}
+							required={question.required}
+							class="input-bordered input w-full"
+							placeholder="Enter your answer..."
+						/>
+					{:else if question.type === 'textarea'}
+						<textarea
+							id={question.id}
+							bind:value={question.answer}
+							required={question.required}
+							rows="4"
+							class="textarea-bordered textarea w-full"
+							placeholder="Provide detailed information..."
+						></textarea>
+					{:else if question.type === 'select'}
+						<select
+							id={question.id}
+							bind:value={question.answer}
+							required={question.required}
+							class="select-bordered select w-full"
 						>
-							<circle
-								class="opacity-25"
-								cx="12"
-								cy="12"
-								r="10"
-								stroke="currentColor"
-								stroke-width="4"
-							></circle>
-							<path
-								class="opacity-75"
-								fill="currentColor"
-								d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-							></path>
-						</svg>
-						Submitting Report...
-					{:else}
-						Submit Incident Report
+							<option value="">Select an option...</option>
+							{#each question.options || [] as option}
+								<option value={option}>{option}</option>
+							{/each}
+						</select>
+					{:else if question.type === 'radio'}
+						<div class="space-y-3">
+							{#each question.options || [] as option}
+								<label class="label cursor-pointer justify-start">
+									<input
+										type="radio"
+										name={question.id}
+										value={option}
+										bind:group={question.answer}
+										required={question.required}
+										class="radio ml-3 radio-primary"
+									/>
+									<span class="label-text">{option}</span>
+								</label>
+							{/each}
+						</div>
+					{:else if question.type === 'checkbox'}
+						<div class="space-y-3">
+							{#each question.options || [] as option}
+								<label class="label cursor-pointer justify-start">
+									<input
+										type="checkbox"
+										checked={Array.isArray(question.answer) && question.answer.includes(option)}
+										on:change={(e) =>
+											handleCheckboxChange(question.id, option, e.currentTarget.checked)}
+										class="checkbox ml-3 checkbox-primary"
+									/>
+									<span class="label-text">{option}</span>
+								</label>
+							{/each}
+						</div>
+					{:else if question.type === 'date'}
+						<input
+							id={question.id}
+							type="date"
+							bind:value={question.answer}
+							required={question.required}
+							class="input-bordered input w-full"
+						/>
+					{:else if question.type === 'datetime-local'}
+						<input
+							id={question.id}
+							type="datetime-local"
+							bind:value={question.answer}
+							required={question.required}
+							class="input-bordered input w-full"
+						/>
 					{/if}
-				</button>
-
-				<p class="mt-3 text-center text-sm text-gray-500">
-					All information will be securely stored and used only for incident response purposes.
-				</p>
+				</div>
 			</div>
-		</form>
+		</div>
+	{/each}
+
+	<!-- Submit section -->
+	<div class="rounded-lg bg-base-100 p-6 shadow-sm">
+		{#if submitMessage}
+			<div
+				class="mb-4 rounded-md p-4 {submitMessage.includes('Error')
+					? 'border border-red-200 bg-red-50 text-red-700'
+					: submitMessage.includes('fill in')
+						? 'border border-yellow-200 bg-yellow-50 text-yellow-700'
+						: 'border border-green-200 bg-green-50 text-green-700'}"
+			>
+				{submitMessage}
+			</div>
+		{/if}
+
+		<button
+			type="submit"
+			disabled={isSubmitting}
+			class="flex w-full items-center justify-center rounded-md bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+		>
+			{#if isSubmitting}
+				<svg
+					class="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+				>
+					<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+					></circle>
+					<path
+						class="opacity-75"
+						fill="currentColor"
+						d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+					></path>
+				</svg>
+				Submitting Report...
+			{:else}
+				Submit Incident Report
+			{/if}
+		</button>
+
+		<p class="mt-3 text-center text-sm text-gray-500">
+			All information will be securely stored and used only for incident response purposes.
+		</p>
 	</div>
-</div>
+</form>
 
 <style>
 	/* Custom scrollbar for textareas */
