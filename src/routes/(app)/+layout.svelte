@@ -15,23 +15,13 @@
 	const navigation = [
 		{
 			name: 'Dashboard',
-			href: '/dashboard',
+			href: '/',
 			icon: 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z M3 7l9-4 9 4M5 10v10a1 1 0 001 1h3m0-11v11m0-11h4m-4 11h4m0-11v11a1 1 0 001-1h3'
 		},
 		{
 			name: 'Active Incidents',
 			href: '/incidents',
 			icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z'
-		},
-		{
-			name: 'Reports',
-			href: '/reports',
-			icon: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-		},
-		{
-			name: 'Playbooks',
-			href: '/playbooks',
-			icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'
 		},
 		{
 			name: 'Settings',
@@ -59,75 +49,18 @@
 
 	<!-- Page content -->
 	<div class="drawer-content flex flex-col">
-		<!-- Navbar -->
-		<div class="navbar w-full bg-base-300">
-			<div class="flex-none lg:hidden">
-				<label for="my-drawer-3" aria-label="open sidebar" class="btn btn-square btn-ghost">
-					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M4 6h16M4 12h16M4 18h16"
-						></path>
-					</svg>
-				</label>
-			</div>
-			<div class="mx-2 flex-1 px-2">
-				<button class="flex items-center" onclick={() => handleNavigation('/')}>
-					<div class="mr-3 flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-						<svg class="h-5 w-5 text-primary-content" fill="currentColor" viewBox="0 0 20 20">
-							<path
-								fill-rule="evenodd"
-								d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-								clip-rule="evenodd"
-							></path>
-						</svg>
-					</div>
-					<span class="text-lg font-bold">SecureOps</span>
-				</button>
-			</div>
-			<div class="flex-none">
-				<div class="dropdown dropdown-end">
-					<div tabindex="0" role="button" class="placeholder btn avatar btn-circle btn-ghost">
-						<div class="w-10 rounded-full bg-neutral text-neutral-content">
-							<span class="text-sm"
-								>{user.name
-									.split(' ')
-									.map((n) => n[0])
-									.join('')}</span
-							>
-						</div>
-					</div>
-					<ul
-						tabindex="0"
-						class="dropdown-content menu z-[1] mt-3 w-52 menu-sm rounded-box bg-base-100 p-2 shadow"
-					>
-						<li>
-							<div class="justify-between">
-								<div>
-									<div class="font-semibold">{user.name}</div>
-									<div class="text-sm opacity-50">{user.role}</div>
-								</div>
-							</div>
-						</li>
-						<li><hr /></li>
-						<li>
-							<button onclick={handleLogout}>
-								<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-									/>
-								</svg>
-								Logout
-							</button>
-						</li>
-					</ul>
-				</div>
-			</div>
+		<!-- Mobile menu button -->
+		<div class="fixed top-4 left-4 z-50 lg:hidden">
+			<label for="my-drawer-3" aria-label="open sidebar" class="btn btn-square btn-primary">
+				<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M4 6h16M4 12h16M4 18h16"
+					></path>
+				</svg>
+			</label>
 		</div>
 
 		<!-- Page content here -->
@@ -139,8 +72,8 @@
 	<!-- Sidebar -->
 	<div class="drawer-side">
 		<label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
-		<aside class="min-h-full w-80 bg-base-200 p-4">
-			<!-- Sidebar content here -->
+		<aside class="flex min-h-full w-80 flex-col bg-base-200 p-4">
+			<!-- App Logo/Title -->
 			<div class="mb-6 flex items-center">
 				<div class="mr-3 flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
 					<svg class="h-5 w-5 text-primary-content" fill="currentColor" viewBox="0 0 20 20">
@@ -151,10 +84,11 @@
 						></path>
 					</svg>
 				</div>
-				<span class="text-lg font-bold">SecureOps</span>
+				<span class="text-lg font-bold">BoboLink</span>
 			</div>
 
-			<ul class="menu w-full">
+			<!-- Navigation Menu -->
+			<ul class="menu w-full flex-1">
 				{#each navigation as item}
 					<li>
 						<button
@@ -174,6 +108,37 @@
 					</li>
 				{/each}
 			</ul>
+
+			<!-- User Profile Section -->
+			<div class="mt-auto border-t border-base-300 pt-4">
+				<div class="mb-3 flex items-center">
+					<div class="placeholder avatar mr-3">
+						<div class="w-10 rounded-full bg-neutral text-neutral-content">
+							<span class="text-sm"
+								>{user.name
+									.split(' ')
+									.map((n) => n[0])
+									.join('')}</span
+							>
+						</div>
+					</div>
+					<div class="flex-1">
+						<div class="text-sm font-semibold">{user.name}</div>
+						<div class="text-xs opacity-70">{user.role}</div>
+					</div>
+				</div>
+				<button class="btn w-full justify-start btn-ghost btn-sm" onclick={handleLogout}>
+					<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+						/>
+					</svg>
+					Logout
+				</button>
+			</div>
 		</aside>
 	</div>
 </div>

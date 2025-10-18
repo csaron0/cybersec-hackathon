@@ -207,7 +207,7 @@
 </script>
 
 <svelte:head>
-	<title>Ransomware Incident Report</title>
+	<title>Ransomware Incident Report - BoboLink</title>
 </svelte:head>
 
 <!-- Header -->

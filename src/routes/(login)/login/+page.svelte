@@ -2,13 +2,17 @@
 	let email: string = '';
 	function login() {
 		localStorage.setItem('email', email);
-        window.location.href = '/';
+		window.location.href = '/';
 	}
 </script>
 
+<svelte:head>
+	<title>BoboLink - Login</title>
+</svelte:head>
+
 <form action="" onsubmit={login} class="mx-auto my-auto">
 	<fieldset class="fieldset w-xs rounded-box border border-base-300 bg-base-200 p-4">
-		<legend class="fieldset-legend">Login</legend>
+		<legend class="fieldset-legend">BoboLink Login</legend>
 
 		<label class="label">Email</label>
 		<input type="email" class="input" placeholder="Email" bind:value={email} />

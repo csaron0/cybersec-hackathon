@@ -96,7 +96,7 @@
 </script>
 
 <svelte:head>
-	<title>Security Dashboard - SecureOps</title>
+	<title>BoboLink Security Dashboard</title>
 </svelte:head>
 
 <!-- Header -->
@@ -105,10 +105,10 @@
 	<p class="mt-2 text-base-content/70">Last login: {user.lastLogin}</p>
 </div>
 
-<!-- Incident Types Section -->
+<!-- Tabbed Interface -->
 <div class="mb-8">
 	<h2 class="mb-4 text-2xl font-bold">Report New Incident</h2>
-	<p class="text-base-content/70">
+	<p class="mb-6 text-base-content/70">
 		Select the type of security incident you need to report. Click on any card to start the
 		reporting process.
 	</p>

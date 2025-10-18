@@ -1,6 +1,10 @@
-# sv
+# BoboLink Security Dashboard
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A modern incident management and security operations platform built with SvelteKit.
+
+## Overview
+
+BoboLink is a comprehensive security dashboard designed for incident response teams to efficiently manage, track, and resolve security incidents. Built with SvelteKit and styled with daisyUI.
 
 ## Creating a project
 
