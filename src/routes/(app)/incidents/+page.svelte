@@ -238,8 +238,8 @@
 				</div>
 
 				<!-- Actions -->
-				<div class="form-control">
-					<label class="label">
+				<div class="form-control flex flex-col">
+					<label class="label" for="actions">
 						<span class="label-text">Actions</span>
 					</label>
 					<button class="btn btn-primary" on:click={() => goto('/initial-report')}>

@@ -22,6 +22,7 @@
 	let isTyping = false;
 	let typingUsers: string[] = [];
 	let currentUser = 'John Doe'; // This would come from auth in real app
+	let activeTab = 'documentation'; // New tab state
 
 	// Mock incident data
 	let incident = {
@@ -365,43 +366,270 @@ Process: suspicious_process.exe
 	/>
 </div>
 
+<!-- Tab Navigation -->
+<div class="mb-6">
+	<div class="tabs-bordered tabs">
+		<button
+			class="tab-lg tab {activeTab === 'documentation' ? 'tab-active' : ''}"
+			on:click={() => (activeTab = 'documentation')}
+		>
+			📋 Incident Documentation
+		</button>
+		<button
+			class="tab-lg tab {activeTab === 'initial-report' ? 'tab-active' : ''}"
+			on:click={() => (activeTab = 'initial-report')}
+		>
+			📝 Initial Report
+		</button>
+	</div>
+</div>
+
 <!-- Main Content Grid -->
 <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-	<!-- Document Editor - Takes up 2 columns on large screens -->
-	<div class="lg:col-span-2">
-		<div class="card bg-base-100 shadow-xl">
-			<div class="card-header">
-				<div class="flex items-center justify-between border-b border-base-300 p-4">
-					<h2 class="text-lg font-semibold">Incident Documentation</h2>
-					<div class="flex items-center gap-2">
-						{#if isTyping}
-							<span class="loading loading-sm loading-dots"></span>
-							<span class="text-xs text-base-content/60">Someone is typing...</span>
-						{/if}
-						<div class="badge badge-sm badge-success">
-							<svg class="mr-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M5 13l4 4L19 7"
-								/>
-							</svg>
-							Auto-saved
+	{#if activeTab === 'documentation'}
+		<!-- Document Editor - Takes up 2 columns on large screens -->
+		<div class="lg:col-span-2">
+			<div class="card bg-base-100 shadow-xl">
+				<div class="card-header">
+					<div class="flex items-center justify-between border-b border-base-300 p-4">
+						<h2 class="text-lg font-semibold">Incident Documentation</h2>
+						<div class="flex items-center gap-2">
+							{#if isTyping}
+								<span class="loading loading-sm loading-dots"></span>
+								<span class="text-xs text-base-content/60">Someone is typing...</span>
+							{/if}
+							<div class="badge badge-sm badge-success">
+								<svg class="mr-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M5 13l4 4L19 7"
+									/>
+								</svg>
+								Auto-saved
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-body p-0">
+					<DocxEditor
+						content={documentContent}
+						placeholder="Start documenting the incident response..."
+						onUpdate={handleDocumentChange}
+						incidentData={incident}
+					/>
+				</div>
+			</div>
+		</div>
+	{:else if activeTab === 'initial-report'}
+		<!-- Initial Report View - Takes up 2 columns on large screens -->
+		<div class="lg:col-span-2">
+			<div class="card bg-base-100 shadow-xl">
+				<div class="card-header">
+					<div class="flex items-center justify-between border-b border-base-300 p-4">
+						<h2 class="text-lg font-semibold">Initial Incident Report</h2>
+						<div class="flex items-center gap-2">
+							<div class="badge badge-sm badge-info">Read-only</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<div class="space-y-6">
+						<!-- Question 1: How was the incident discovered -->
+						<div class="card border bg-base-200">
+							<div class="card-body">
+								<h3 class="card-title text-lg">1. How was the ransomware incident discovered?</h3>
+								<p class="mb-4 text-base-content/70">
+									Describe how you first became aware of the ransomware attack.
+								</p>
+								<div class="form-control">
+									<div class="rounded border bg-base-100 p-3">User reported encrypted files</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Question 2: Discovery time -->
+						<div class="card border bg-base-200">
+							<div class="card-body">
+								<h3 class="card-title text-lg">2. When was the incident first discovered?</h3>
+								<p class="mb-4 text-base-content/70">
+									Provide the date and time when the ransomware was first detected.
+								</p>
+								<div class="form-control">
+									<div class="rounded border bg-base-100 p-3">
+										{incident.created.toLocaleString()}
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Question 3: Affected systems -->
+						<div class="card border bg-base-200">
+							<div class="card-body">
+								<h3 class="card-title text-lg">3. Which systems are affected?</h3>
+								<p class="mb-4 text-base-content/70">
+									List all systems, servers, or devices that appear to be compromised or encrypted.
+								</p>
+								<div class="form-control">
+									<div class="min-h-24 rounded border bg-base-100 p-3">
+										• Finance Department Workstations (10 machines)<br />
+										• File Server: FS-FINANCE-01<br />
+										• Database Server: DB-CUSTOMER-02<br />
+										• Backup System: BACKUP-SRV-01 (partially affected)
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Question 4: Ransom note -->
+						<div class="card border bg-base-200">
+							<div class="card-body">
+								<h3 class="card-title text-lg">4. Was a ransom note found?</h3>
+								<p class="mb-4 text-base-content/70">
+									Indicate if attackers left any ransom demands or instructions.
+								</p>
+								<div class="form-control">
+									<div class="rounded border bg-base-100 p-3">Yes</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Question 5: Ransom details -->
+						<div class="card border bg-base-200">
+							<div class="card-body">
+								<h3 class="card-title text-lg">5. Ransom note details</h3>
+								<p class="mb-4 text-base-content/70">
+									If a ransom note was found, provide the content or key details (amount demanded,
+									payment method, deadline, etc.).
+								</p>
+								<div class="form-control">
+									<div class="min-h-24 rounded border bg-base-100 p-3">
+										Ransom demand: 5.2 Bitcoin (~$280,000 USD)<br />
+										Payment deadline: 72 hours from encryption<br />
+										Payment method: Bitcoin wallet address provided<br />
+										Contact: TOR-based email address<br />
+										Threat: Data deletion after deadline expires
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Question 6: Data encrypted -->
+						<div class="card border bg-base-200">
+							<div class="card-body">
+								<h3 class="card-title text-lg">6. What types of data appear to be encrypted?</h3>
+								<p class="mb-4 text-base-content/70">
+									Select all types of data that have been affected by the encryption.
+								</p>
+								<div class="form-control">
+									<div class="rounded border bg-base-100 p-3">
+										<div class="space-y-2">
+											<div class="flex items-center gap-2">
+												<span class="badge badge-sm badge-primary">✓</span> Documents and files
+											</div>
+											<div class="flex items-center gap-2">
+												<span class="badge badge-sm badge-primary">✓</span> Database files
+											</div>
+											<div class="flex items-center gap-2">
+												<span class="badge badge-sm badge-primary">✓</span> Financial records
+											</div>
+											<div class="flex items-center gap-2">
+												<span class="badge badge-sm badge-primary">✓</span> Customer data
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Question 7: Backup status -->
+						<div class="card border bg-base-200">
+							<div class="card-body">
+								<h3 class="card-title text-lg">7. What is the status of your backups?</h3>
+								<p class="mb-4 text-base-content/70">
+									Indicate the current state of your backup systems and data recovery options.
+								</p>
+								<div class="form-control">
+									<div class="rounded border bg-base-100 p-3">
+										Backups available but not verified
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Question 8: Network isolation -->
+						<div class="card border bg-base-200">
+							<div class="card-body">
+								<h3 class="card-title text-lg">
+									8. Have affected systems been isolated from the network?
+								</h3>
+								<p class="mb-4 text-base-content/70">
+									Indicate if containment measures have been implemented.
+								</p>
+								<div class="form-control">
+									<div class="rounded border bg-base-100 p-3">Yes, fully isolated</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Question 9: Business impact -->
+						<div class="card border bg-base-200">
+							<div class="card-body">
+								<h3 class="card-title text-lg">9. Current business impact</h3>
+								<p class="mb-4 text-base-content/70">
+									Describe how the incident is currently affecting business operations.
+								</p>
+								<div class="form-control">
+									<div class="min-h-24 rounded border bg-base-100 p-3">
+										Significant impact on finance department operations. Unable to process payroll,
+										accounts payable, and financial reporting. Customer billing systems offline.
+										Estimated revenue impact: $50,000 per day of downtime.
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Question 10: Attack vector -->
+						<div class="card border bg-base-200">
+							<div class="card-body">
+								<h3 class="card-title text-lg">10. Suspected attack vector</h3>
+								<p class="mb-4 text-base-content/70">
+									If known, how do you believe the attackers gained initial access?
+								</p>
+								<div class="form-control">
+									<div class="rounded border bg-base-100 p-3">Phishing email</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Submission info -->
+						<div class="card border bg-base-300">
+							<div class="card-body">
+								<h3 class="card-title text-lg">Report Submission Details</h3>
+								<div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+									<div>
+										<span class="font-medium">Submitted by:</span> Jane Smith (Security Analyst)
+									</div>
+									<div>
+										<span class="font-medium">Submission time:</span>
+										{incident.created.toLocaleString()}
+									</div>
+									<div>
+										<span class="font-medium">Report ID:</span> #{incident.id}-INITIAL
+									</div>
+									<div>
+										<span class="font-medium">Status:</span>
+										<span class="badge badge-sm badge-success">Submitted</span>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="card-body p-0">
-				<DocxEditor
-					content={documentContent}
-					placeholder="Start documenting the incident response..."
-					onUpdate={handleDocumentChange}
-					incidentData={incident}
-				/>
-			</div>
 		</div>
-	</div>
+	{/if}
 
 	<!-- Chat Panel -->
 	<div class="lg:col-span-1">
