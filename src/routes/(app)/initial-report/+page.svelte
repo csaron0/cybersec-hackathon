@@ -3,137 +3,155 @@
 	interface Question {
 		id: string;
 		title: string;
-		description: string;
+		description?: string;
 		type: 'text' | 'textarea' | 'select' | 'radio' | 'checkbox' | 'date' | 'datetime-local';
 		required: boolean;
 		options?: string[];
 		answer: string | string[];
+		width?: 'full' | 'half' | 'third';
 	}
 
-	// Mock questions for ransomware incident
-	let questions: Question[] = [
-		{
-			id: 'incident_discovery',
-			title: 'How was the ransomware incident discovered?',
-			description: 'Describe how you first became aware of the ransomware attack.',
-			type: 'select',
-			required: true,
-			options: [
-				'User reported encrypted files',
-				'Antivirus alert',
-				'System performance issues',
-				'Ransom note discovered',
-				'IT monitoring systems',
-				'Other'
-			],
-			answer: ''
-		},
-		{
-			id: 'discovery_time',
-			title: 'When was the incident first discovered?',
-			description: 'Provide the date and time when the ransomware was first detected.',
-			type: 'datetime-local',
-			required: true,
-			answer: ''
-		},
-		{
-			id: 'affected_systems',
-			title: 'Which systems are affected?',
-			description:
-				'List all systems, servers, or devices that appear to be compromised or encrypted.',
-			type: 'textarea',
-			required: true,
-			answer: ''
-		},
-		{
-			id: 'ransom_note',
-			title: 'Was a ransom note found?',
-			description: 'Indicate if attackers left any ransom demands or instructions.',
-			type: 'radio',
-			required: true,
-			options: ['Yes', 'No', 'Unknown'],
-			answer: ''
-		},
-		{
-			id: 'ransom_details',
-			title: 'Ransom note details',
-			description:
-				'If a ransom note was found, provide the content or key details (amount demanded, payment method, deadline, etc.).',
-			type: 'textarea',
-			required: false,
-			answer: ''
-		},
-		{
-			id: 'data_encrypted',
-			title: 'What types of data appear to be encrypted?',
-			description: 'Select all types of data that have been affected by the encryption.',
-			type: 'checkbox',
-			required: true,
-			options: [
-				'Documents and files',
-				'Database files',
-				'Email systems',
-				'Backup files',
-				'System files',
-				'Customer data',
-				'Financial records',
-				'Other'
-			],
-			answer: []
-		},
-		{
-			id: 'backup_status',
-			title: 'What is the status of your backups?',
-			description: 'Indicate the current state of your backup systems and data recovery options.',
-			type: 'select',
-			required: true,
-			options: [
-				'Backups available and verified clean',
-				'Backups available but not verified',
-				'Backups partially compromised',
-				'Backups fully compromised',
-				'No recent backups available',
-				'Unknown'
-			],
-			answer: ''
-		},
-		{
-			id: 'network_isolated',
-			title: 'Have affected systems been isolated from the network?',
-			description: 'Indicate if containment measures have been implemented.',
-			type: 'radio',
-			required: true,
-			options: ['Yes, fully isolated', 'Partially isolated', 'No isolation yet', 'Unknown'],
-			answer: ''
-		},
-		{
-			id: 'business_impact',
-			title: 'Current business impact',
-			description: 'Describe how the incident is currently affecting business operations.',
-			type: 'textarea',
-			required: true,
-			answer: ''
-		},
-		{
-			id: 'initial_vector',
-			title: 'Suspected attack vector',
-			description: 'If known, how do you believe the attackers gained initial access?',
-			type: 'select',
-			required: false,
-			options: [
-				'Phishing email',
-				'Malicious attachment',
-				'Compromised credentials',
-				'Remote desktop protocol (RDP)',
-				'Vulnerable software/service',
-				'USB/removable media',
-				'Supply chain compromise',
-				'Unknown',
-				'Other'
-			],
-			answer: ''
-		}
+	// Mock questions organized in rows for a more compact layout
+	let questionRows: Question[][] = [
+		// Row 1: Discovery basics
+		[
+			{
+				id: 'discovery_time',
+				title: 'When discovered?',
+				type: 'datetime-local',
+				required: true,
+				answer: '',
+				width: 'half'
+			},
+			{
+				id: 'incident_discovery',
+				title: 'How discovered?',
+				type: 'select',
+				required: true,
+				options: [
+					'User report',
+					'Antivirus alert',
+					'Performance issues',
+					'Ransom note',
+					'Monitoring',
+					'Other'
+				],
+				answer: '',
+				width: 'half'
+			}
+		],
+		// Row 2: Systems and impact
+		[
+			{
+				id: 'affected_systems',
+				title: 'Affected systems',
+				description: 'List compromised systems/devices',
+				type: 'textarea',
+				required: true,
+				answer: '',
+				width: 'full'
+			}
+		],
+		// Row 3: Ransom info
+		[
+			{
+				id: 'ransom_note',
+				title: 'Ransom note found?',
+				type: 'radio',
+				required: true,
+				options: ['Yes', 'No', 'Unknown'],
+				answer: '',
+				width: 'third'
+			},
+			{
+				id: 'ransom_amount',
+				title: 'Ransom amount',
+				type: 'text',
+				required: false,
+				answer: '',
+				width: 'third'
+			},
+			{
+				id: 'payment_method',
+				title: 'Payment method',
+				type: 'select',
+				required: false,
+				options: ['Bitcoin', 'Cryptocurrency', 'Bank transfer', 'Other', 'Unknown'],
+				answer: '',
+				width: 'third'
+			}
+		],
+		// Row 4: Data and backups
+		[
+			{
+				id: 'data_encrypted',
+				title: 'Encrypted data types',
+				type: 'checkbox',
+				required: true,
+				options: ['Documents', 'Databases', 'Email', 'Backups', 'System files', 'Customer data'],
+				answer: [],
+				width: 'half'
+			},
+			{
+				id: 'backup_status',
+				title: 'Backup status',
+				type: 'select',
+				required: true,
+				options: [
+					'Available & clean',
+					'Available unverified',
+					'Partially compromised',
+					'Fully compromised',
+					'No backups'
+				],
+				answer: '',
+				width: 'half'
+			}
+		],
+		// Row 5: Response actions
+		[
+			{
+				id: 'network_isolated',
+				title: 'Systems isolated?',
+				type: 'radio',
+				required: true,
+				options: ['Fully isolated', 'Partially isolated', 'No isolation', 'Unknown'],
+				answer: '',
+				width: 'half'
+			},
+			{
+				id: 'initial_vector',
+				title: 'Suspected attack vector',
+				type: 'select',
+				required: false,
+				options: [
+					'Phishing',
+					'Malicious attachment',
+					'Compromised credentials',
+					'RDP',
+					'Vulnerable software',
+					'Unknown'
+				],
+				answer: '',
+				width: 'half'
+			}
+		],
+		// Row 6: Business impact
+		[
+			{
+				id: 'business_impact',
+				title: 'Business impact',
+				description: 'How is this affecting operations?',
+				type: 'textarea',
+				required: true,
+				answer: '',
+				width: 'full'
+			}
+		]
 	];
+
+	// Flatten for easier processing
+	let questions: Question[] = questionRows.flat();
 
 	// Form submission state
 	let isSubmitting = false;
@@ -211,143 +229,145 @@
 </svelte:head>
 
 <!-- Header -->
-<div class="card mb-6 bg-base-100 shadow-xl">
-	<div class="card-body">
-		<div class="mb-4 flex items-center">
-			<div class="mr-4 flex h-12 w-12 items-center justify-center rounded-lg bg-error/20">
-				<svg class="h-6 w-6 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-					></path>
-				</svg>
-			</div>
-			<div>
-				<h1 class="text-3xl font-bold">Ransomware Incident Report</h1>
-				<p class="mt-1 text-base-content/70">
-					Please provide detailed information about the ransomware incident
-				</p>
-			</div>
-		</div>
-		<div class="alert alert-error">
-			<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+<div class="mb-6">
+	<div class="mb-4 flex items-center">
+		<div class="mr-3 flex h-10 w-10 items-center justify-center rounded-lg bg-error/20">
+			<svg class="h-5 w-5 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path
-					fill-rule="evenodd"
-					d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-					clip-rule="evenodd"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
 				></path>
 			</svg>
-			<div>
-				<p>
-					<strong>Important:</strong> This form helps collect critical information for incident response.
-					Please be as detailed and accurate as possible.
-				</p>
-			</div>
+		</div>
+		<div>
+			<h1 class="text-2xl font-bold">Ransomware Incident Report</h1>
+			<p class="text-sm text-base-content/70">Complete this form to initiate incident response</p>
 		</div>
 	</div>
 </div>
 
 <!-- Form -->
-<form on:submit|preventDefault={handleSubmit} class="space-y-6">
-	{#each questions as question, index}
-		<div class="card bg-base-100 shadow-xl">
-			<div class="card-body">
-				<h3 class="card-title text-lg">
-					{index + 1}. {question.title}
-					{#if question.required}
-						<span class="text-error">*</span>
-					{/if}
-				</h3>
-				<p class="mb-4 text-base-content/70">{question.description}</p>
+<form on:submit|preventDefault={handleSubmit} class="space-y-4">
+	{#each questionRows as row, rowIndex}
+		<div
+			class="grid gap-4 {row.length === 1
+				? 'grid-cols-1'
+				: row.length === 2
+					? 'grid-cols-1 md:grid-cols-2'
+					: 'grid-cols-1 md:grid-cols-3'}"
+		>
+			{#each row as question}
+				<div
+					class="card border border-base-300 bg-base-200 shadow-xl {question.width === 'full'
+						? 'md:col-span-full'
+						: question.width === 'half'
+							? 'md:col-span-1'
+							: 'md:col-span-1'}"
+				>
+					<div class="card-body p-4">
+						<div class="form-control">
+							<!-- svelte-ignore a11y_label_has_associated_control -->
+							<label class="label mb-3">
+								<span class="label-text font-medium">
+									{question.title}
+									{#if question.required}
+										<span class="text-error">*</span>
+									{/if}
+								</span>
+							</label>
+							{#if question.description}
+								<p class="mb-2 text-sm text-base-content/60">{question.description}</p>
+							{/if}
 
-				<div class="form-control w-full">
-					{#if question.type === 'text'}
-						<input
-							id={question.id}
-							type="text"
-							bind:value={question.answer}
-							required={question.required}
-							class="input-bordered input w-full"
-							placeholder="Enter your answer..."
-						/>
-					{:else if question.type === 'textarea'}
-						<textarea
-							id={question.id}
-							bind:value={question.answer}
-							required={question.required}
-							rows="4"
-							class="textarea-bordered textarea w-full"
-							placeholder="Provide detailed information..."
-						></textarea>
-					{:else if question.type === 'select'}
-						<select
-							id={question.id}
-							bind:value={question.answer}
-							required={question.required}
-							class="select-bordered select w-full"
-						>
-							<option value="">Select an option...</option>
-							{#each question.options || [] as option}
-								<option value={option}>{option}</option>
-							{/each}
-						</select>
-					{:else if question.type === 'radio'}
-						<div class="space-y-3">
-							{#each question.options || [] as option}
-								<label class="label cursor-pointer justify-start">
-									<input
-										type="radio"
-										name={question.id}
-										value={option}
-										bind:group={question.answer}
-										required={question.required}
-										class="radio ml-3 radio-primary"
-									/>
-									<span class="label-text">{option}</span>
-								</label>
-							{/each}
+							{#if question.type === 'text'}
+								<input
+									id={question.id}
+									type="text"
+									bind:value={question.answer}
+									required={question.required}
+									class="input-bordered input input-sm w-full"
+									placeholder="Enter value..."
+								/>
+							{:else if question.type === 'textarea'}
+								<textarea
+									id={question.id}
+									bind:value={question.answer}
+									required={question.required}
+									rows="3"
+									class="textarea-bordered textarea w-full textarea-sm"
+									placeholder="Provide details..."
+								></textarea>
+							{:else if question.type === 'select'}
+								<select
+									id={question.id}
+									bind:value={question.answer}
+									required={question.required}
+									class="select-bordered select w-full select-sm"
+								>
+									<option value="">Select...</option>
+									{#each question.options || [] as option}
+										<option value={option}>{option}</option>
+									{/each}
+								</select>
+							{:else if question.type === 'radio'}
+								<div class="flex w-full flex-wrap gap-3">
+									{#each question.options || [] as option}
+										<label class="label cursor-pointer p-0">
+											<input
+												type="radio"
+												name={question.id}
+												value={option}
+												bind:group={question.answer}
+												required={question.required}
+												class="radio mr-2 radio-sm radio-primary"
+											/>
+											<span class="label-text text-sm">{option}</span>
+										</label>
+									{/each}
+								</div>
+							{:else if question.type === 'checkbox'}
+								<div class="flex w-full flex-wrap gap-3">
+									{#each question.options || [] as option}
+										<label class="label cursor-pointer p-0">
+											<input
+												type="checkbox"
+												checked={Array.isArray(question.answer) && question.answer.includes(option)}
+												on:change={(e) =>
+													handleCheckboxChange(question.id, option, e.currentTarget.checked)}
+												class="checkbox ml-2 checkbox-sm checkbox-primary"
+											/>
+											<span class="label-text text-sm">{option}</span>
+										</label>
+									{/each}
+								</div>
+							{:else if question.type === 'date'}
+								<input
+									id={question.id}
+									type="date"
+									bind:value={question.answer}
+									required={question.required}
+									class="input-bordered input input-sm w-full"
+								/>
+							{:else if question.type === 'datetime-local'}
+								<input
+									id={question.id}
+									type="datetime-local"
+									bind:value={question.answer}
+									required={question.required}
+									class="input-bordered input input-sm w-full"
+								/>
+							{/if}
 						</div>
-					{:else if question.type === 'checkbox'}
-						<div class="space-y-3">
-							{#each question.options || [] as option}
-								<label class="label cursor-pointer justify-start">
-									<input
-										type="checkbox"
-										checked={Array.isArray(question.answer) && question.answer.includes(option)}
-										on:change={(e) =>
-											handleCheckboxChange(question.id, option, e.currentTarget.checked)}
-										class="checkbox ml-3 checkbox-primary"
-									/>
-									<span class="label-text">{option}</span>
-								</label>
-							{/each}
-						</div>
-					{:else if question.type === 'date'}
-						<input
-							id={question.id}
-							type="date"
-							bind:value={question.answer}
-							required={question.required}
-							class="input-bordered input w-full"
-						/>
-					{:else if question.type === 'datetime-local'}
-						<input
-							id={question.id}
-							type="datetime-local"
-							bind:value={question.answer}
-							required={question.required}
-							class="input-bordered input w-full"
-						/>
-					{/if}
+					</div>
 				</div>
-			</div>
+			{/each}
 		</div>
 	{/each}
 
 	<!-- Submit section -->
-	<div class="rounded-lg bg-base-100 p-6 shadow-sm">
+	<div class="rounded-lg border border-base-300 bg-base-200 p-6 shadow-xl">
 		{#if submitMessage}
 			<div
 				class="mb-4 rounded-md p-4 {submitMessage.includes('Error')

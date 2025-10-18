@@ -45,20 +45,22 @@
 				<!-- Text Formatting -->
 				<div class="join">
 					<button class="btn join-item btn-sm" title="Bold">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
 							<path
-								d="M12.83 11.17a4 4 0 010 5.66A4 4 0 019 20H4V4h5a4 4 0 013.83 3.17 3 3 0 010 4zM7 7v2h2a1 1 0 010 2H7v2h2a2 2 0 000-4H7z"
+								d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"
 							/>
 						</svg>
 					</button>
 					<button class="btn join-item btn-sm" title="Italic">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-							<path d="M10 4v12l-1.5-3h-1L10 4zM8 16h4l-2-4-2 4z" />
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+							<path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4h-8z" />
 						</svg>
 					</button>
 					<button class="btn join-item btn-sm" title="Underline">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-							<path d="M3 18h14v2H3v-2zM6 4v6a4 4 0 008 0V4h2v6a6 6 0 01-12 0V4h2z" />
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+							<path
+								d="M12 17c3.31 0 6-2.69 6-6V3h-2.5v8c0 1.93-1.57 3.5-3.5 3.5S8.5 12.93 8.5 11V3H6v8c0 3.31 2.69 6 6 6zm-7 2v2h14v-2H5z"
+							/>
 						</svg>
 					</button>
 				</div>
@@ -68,16 +70,31 @@
 				<!-- Text Color & Highlight -->
 				<div class="join">
 					<button class="btn join-item btn-sm" title="Text Color">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-							<path d="M13.5 2l3 3L8 13.5l-3-3L13.5 2zM9 15l-1-1-4 4v2h2l4-4-1-1z" />
+						<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M7 21h10l-2-6H9l-2 6z"
+							/>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M12 3L8 14h8l-4-11z"
+							/>
+							<rect x="6" y="18" width="12" height="2" fill="currentColor" />
 						</svg>
-						<span class="ml-1 text-xs">A</span>
 					</button>
 					<button class="btn join-item btn-sm" title="Highlight">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+						<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
-								d="M17.7 2.3c.4-.4.4-1 0-1.4s-1-.4-1.4 0L12 5.2 8.3 1.5c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4L10.2 6l-5.5 5.5c-.4.4-.4 1 0 1.4.2.2.4.3.7.3s.5-.1.7-.3L12 7l3.7 3.7c.4.4 1 .4 1.4 0s.4-1 0-1.4L13.8 6l3.9-3.7z"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
 							/>
+							<rect x="4" y="16" width="16" height="4" fill="currentColor" opacity="0.3" />
 						</svg>
 					</button>
 				</div>
@@ -87,23 +104,27 @@
 				<!-- Alignment -->
 				<div class="join">
 					<button class="btn join-item btn-sm" title="Align Left">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-							<path d="M2 4h16v2H2V4zm0 4h10v2H2V8zm0 4h16v2H2v-2zm0 4h10v2H2v-2z" />
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+							<path d="M3 3h18v2H3V3zm0 4h12v2H3V7zm0 4h18v2H3v-2zm0 4h12v2H3v-2zm0 4h18v2H3v-2z" />
 						</svg>
 					</button>
 					<button class="btn join-item btn-sm" title="Center">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-							<path d="M2 4h16v2H2V4zm2 4h12v2H4V8zm-2 4h16v2H2v-2zm2 4h12v2H4v-2z" />
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+							<path
+								d="M3 3h18v2H3V3zm3 4h12v2H6V7zm-3 4h18v2H3v-2zm3 4h12v2H6v-2zm-3 4h18v2H3v-2z"
+							/>
 						</svg>
 					</button>
 					<button class="btn join-item btn-sm" title="Align Right">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-							<path d="M2 4h16v2H2V4zm6 4h10v2H8V8zm-6 4h16v2H2v-2zm6 4h10v2H8v-2z" />
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+							<path
+								d="M3 3h18v2H3V3zm6 4h12v2H9V7zm-6 4h18v2H3v-2zm6 4h12v2H9v-2zm-6 4h18v2H3v-2z"
+							/>
 						</svg>
 					</button>
 					<button class="btn join-item btn-sm" title="Justify">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-							<path d="M2 4h16v2H2V4zm0 4h16v2H2V8zm0 4h16v2H2v-2zm0 4h16v2H2v-2z" />
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+							<path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h18v2H3v-2zm0 4h18v2H3v-2zm0 4h18v2H3v-2z" />
 						</svg>
 					</button>
 				</div>
@@ -113,16 +134,16 @@
 				<!-- Lists -->
 				<div class="join">
 					<button class="btn join-item btn-sm" title="Bullet List">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
 							<path
-								d="M3 4a1 1 0 110-2 1 1 0 010 2zm0 4a1 1 0 110-2 1 1 0 010 2zm0 4a1 1 0 110-2 1 1 0 010 2zm4-7h10v2H7V5zm0 4h10v2H7V9zm0 4h10v2H7v-2z"
+								d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"
 							/>
 						</svg>
 					</button>
 					<button class="btn join-item btn-sm" title="Numbered List">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
 							<path
-								d="M5.5 2v2h-1V2h1zm0 3v2h-1V5h1zm0 3v2h-1V8h1zM9 5h8v2H9V5zm0 4h8v2H9V9zm0 4h8v2H9v-2z"
+								d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z"
 							/>
 						</svg>
 					</button>
@@ -133,30 +154,29 @@
 				<!-- Insert Tools -->
 				<div class="flex items-center space-x-2">
 					<button class="btn btn-sm" title="Insert Link">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+						<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
-								d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5z"
-							/>
-							<path
-								d="M7.414 15.414a2 2 0 01-2.828-2.828l3-3a2 2 0 012.828 0 1 1 0 001.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5z"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
 							/>
 						</svg>
 					</button>
 					<button class="btn btn-sm" title="Insert Image">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+						<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
-								fill-rule="evenodd"
-								d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-								clip-rule="evenodd"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
 							/>
 						</svg>
 					</button>
 					<button class="btn btn-sm" title="Insert Table">
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
 							<path
-								fill-rule="evenodd"
-								d="M3 4a1 1 0 011-1h12a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 1v3h3V5H5zm5 0v3h3V5h-3zm5 0v3h3V5h-3zM5 10v3h3v-3H5zm5 0v3h3v-3h-3zm5 0v3h3v-3h-3z"
-								clip-rule="evenodd"
+								d="M4 3h16a1 1 0 011 1v16a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1zm1 2v3h5V5H5zm7 0v3h5V5h-5zm5 5h-5v4h5v-4zm-7 0H5v4h5v-4zm0 6H5v3h5v-3zm2 0v3h5v-3h-5z"
 							/>
 						</svg>
 					</button>
@@ -297,10 +317,6 @@
 			box-shadow: none;
 			border: none;
 			width: 100%;
-		}
-
-		body {
-			background: white !important;
 		}
 
 		.bg-gray-100 {

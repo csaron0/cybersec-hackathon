@@ -23,17 +23,171 @@
 	let typingUsers: string[] = [];
 	let currentUser = 'John Doe'; // This would come from auth in real app
 	let activeTab = 'documentation'; // New tab state
+	let workflowComponent: IncidentWorkflow; // Reference to workflow component
+
+	// Types for the form structure
+	interface Question {
+		id: string;
+		title: string;
+		description?: string;
+		type: 'text' | 'textarea' | 'select' | 'radio' | 'checkbox' | 'date' | 'datetime-local';
+		required: boolean;
+		options?: string[];
+		answer: string | string[];
+		width?: 'full' | 'half' | 'third';
+	}
 
 	// Mock incident data
 	let incident = {
 		id: '',
 		title: 'Loading...',
-		status: 'Open',
+		statusIndex: 0, // Changed from status string to statusIndex number
 		priority: 'High',
 		assignee: 'Jane Smith',
 		created: new Date(),
 		description: 'Loading incident details...'
 	};
+
+	// Initial report data structure - populated with mock data
+	let questionRows: Question[][] = [
+		// Row 1: Discovery basics
+		[
+			{
+				id: 'discovery_time',
+				title: 'When discovered?',
+				type: 'datetime-local',
+				required: true,
+				answer: '2024-10-17T09:30',
+				width: 'half'
+			},
+			{
+				id: 'incident_discovery',
+				title: 'How discovered?',
+				type: 'select',
+				required: true,
+				options: [
+					'User report',
+					'Antivirus alert',
+					'Performance issues',
+					'Ransom note',
+					'Monitoring',
+					'Other'
+				],
+				answer: 'User report',
+				width: 'half'
+			}
+		],
+		// Row 2: Systems and impact
+		[
+			{
+				id: 'affected_systems',
+				title: 'Affected systems',
+				description: 'List compromised systems/devices',
+				type: 'textarea',
+				required: true,
+				answer:
+					'• Finance Department Workstations (10 machines)\n• File Server: FS-FINANCE-01\n• Database Server: DB-CUSTOMER-02\n• Backup System: BACKUP-SRV-01 (partially affected)',
+				width: 'full'
+			}
+		],
+		// Row 3: Ransom info
+		[
+			{
+				id: 'ransom_note',
+				title: 'Ransom note found?',
+				type: 'radio',
+				required: true,
+				options: ['Yes', 'No', 'Unknown'],
+				answer: 'Yes',
+				width: 'third'
+			},
+			{
+				id: 'ransom_amount',
+				title: 'Ransom amount',
+				type: 'text',
+				required: false,
+				answer: '5.2 Bitcoin (~$280,000)',
+				width: 'third'
+			},
+			{
+				id: 'payment_method',
+				title: 'Payment method',
+				type: 'select',
+				required: false,
+				options: ['Bitcoin', 'Cryptocurrency', 'Bank transfer', 'Other', 'Unknown'],
+				answer: 'Bitcoin',
+				width: 'third'
+			}
+		],
+		// Row 4: Data and backups
+		[
+			{
+				id: 'data_encrypted',
+				title: 'Encrypted data types',
+				type: 'checkbox',
+				required: true,
+				options: ['Documents', 'Databases', 'Email', 'Backups', 'System files', 'Customer data'],
+				answer: ['Documents', 'Databases', 'Customer data'],
+				width: 'half'
+			},
+			{
+				id: 'backup_status',
+				title: 'Backup status',
+				type: 'select',
+				required: true,
+				options: [
+					'Available & clean',
+					'Available unverified',
+					'Partially compromised',
+					'Fully compromised',
+					'No backups'
+				],
+				answer: 'Partially compromised',
+				width: 'half'
+			}
+		],
+		// Row 5: Response actions
+		[
+			{
+				id: 'network_isolated',
+				title: 'Systems isolated?',
+				type: 'radio',
+				required: true,
+				options: ['Fully isolated', 'Partially isolated', 'No isolation', 'Unknown'],
+				answer: 'Fully isolated',
+				width: 'half'
+			},
+			{
+				id: 'initial_vector',
+				title: 'Suspected attack vector',
+				type: 'select',
+				required: false,
+				options: [
+					'Phishing',
+					'Malicious attachment',
+					'Compromised credentials',
+					'RDP',
+					'Vulnerable software',
+					'Unknown'
+				],
+				answer: 'Phishing',
+				width: 'half'
+			}
+		],
+		// Row 6: Business impact
+		[
+			{
+				id: 'business_impact',
+				title: 'Business impact',
+				description: 'How is this affecting operations?',
+				type: 'textarea',
+				required: true,
+				answer:
+					'Finance department operations completely halted. Unable to process payments, invoices, or access customer billing data. Estimated revenue impact: $50,000/day until systems restored.',
+				width: 'full'
+			}
+		]
+	];
 
 	// Simulated WebSocket connection for real-time features
 	let ws: WebSocket | null = null;
@@ -61,7 +215,7 @@
 			'1': {
 				id: '1',
 				title: 'Ransomware Attack - Finance Department',
-				status: 'Drafting',
+				statusIndex: 1, // Initial Triage & Technical Review
 				priority: 'Critical',
 				assignee: 'Security Team Alpha',
 				created: new Date('2024-10-17T09:30:00'),
@@ -71,7 +225,7 @@
 			'2': {
 				id: '2',
 				title: 'Phishing Campaign - HR Department',
-				status: 'Finalizing',
+				statusIndex: 3, // Communications Drafting
 				priority: 'High',
 				assignee: 'Jane Smith',
 				created: new Date('2024-10-17T11:15:00'),
@@ -81,7 +235,7 @@
 			'3': {
 				id: '3',
 				title: 'Data Breach - Customer Database',
-				status: 'Approval',
+				statusIndex: 2, // Legal & Regulatory Assessment
 				priority: 'Critical',
 				assignee: 'Security Team Beta',
 				created: new Date('2024-10-17T14:20:00'),
@@ -90,7 +244,7 @@
 			'4': {
 				id: '4',
 				title: 'DDoS Attack - Web Services',
-				status: 'Approved',
+				statusIndex: 4, // Management Approval
 				priority: 'High',
 				assignee: 'Network Team',
 				created: new Date('2024-10-18T07:45:00'),
@@ -99,7 +253,7 @@
 			'5': {
 				id: '5',
 				title: 'Insider Threat - Suspicious Activity',
-				status: 'Closed',
+				statusIndex: 7, // Post-Incident Review & Closure
 				priority: 'Medium',
 				assignee: 'Security Team Alpha',
 				created: new Date('2024-10-18T10:20:00'),
@@ -110,7 +264,7 @@
 		incident = incidents[incidentId as keyof typeof incidents] || {
 			id: incidentId,
 			title: `Incident #${incidentId}`,
-			status: 'Open',
+			statusIndex: 0, // Incident Opened
 			priority: 'Medium',
 			assignee: 'Unassigned',
 			created: new Date(),
@@ -152,7 +306,7 @@
 
 ## Incident Overview
 - **ID**: ${incident.id}
-- **Status**: ${incident.status}
+- **Status**: ${workflowComponent?.getStatusName(incident.statusIndex) || 'Loading...'}
 - **Priority**: ${incident.priority}
 - **Assigned to**: ${incident.assignee}
 - **Created**: ${incident.created.toLocaleString()}
@@ -293,44 +447,6 @@ Process: suspicious_process.exe
 		if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
 		return date.toLocaleDateString();
 	}
-
-	function getStatusClass(status: string): string {
-		switch (status.toLowerCase()) {
-			case 'drafting':
-				return 'badge-info';
-			case 'finalizing':
-				return 'badge-warning';
-			case 'approval':
-				return 'badge-secondary';
-			case 'approved':
-				return 'badge-success';
-			case 'closed':
-				return 'badge-neutral';
-			default:
-				return 'badge-ghost';
-		}
-	}
-
-	function handleStatusChange(newStatus: string) {
-		// Update the incident status
-		incident.status = newStatus;
-		incident = { ...incident }; // Trigger reactivity
-
-		// In a real app, this would make an API call to update the status
-		console.log(`Status changed to: ${newStatus} for incident ${incidentId}`);
-
-		// Add a system message to chat
-		const systemMessage: ChatMessage = {
-			id: Date.now().toString(),
-			user: 'System',
-			message: `Status changed to: ${newStatus}`,
-			timestamp: new Date(),
-			avatar: '🔄'
-		};
-
-		chatMessages = [...chatMessages, systemMessage];
-		scrollToBottom();
-	}
 </script>
 
 <svelte:head>
@@ -342,13 +458,6 @@ Process: suspicious_process.exe
 	<div class="flex items-center justify-between">
 		<div>
 			<h1 class="text-2xl font-bold">{incident.title}</h1>
-			<div class="mt-2 flex items-center gap-4">
-				<span class="badge {getStatusClass(incident.status)}">{incident.status}</span>
-				<span class="text-sm text-base-content/70">#{incident.id}</span>
-				<span class="text-sm text-base-content/70"
-					>Created: {incident.created.toLocaleDateString()}</span
-				>
-			</div>
 		</div>
 		<div class="text-right">
 			<div class="text-sm text-base-content/70">Assigned to</div>
@@ -359,11 +468,7 @@ Process: suspicious_process.exe
 
 <!-- Workflow Component -->
 <div class="mb-6">
-	<IncidentWorkflow
-		currentStatus={incident.status}
-		incidentId={incident.id}
-		onStatusChange={handleStatusChange}
-	/>
+	<IncidentWorkflow bind:this={workflowComponent} currentStageIndex={incident.statusIndex} />
 </div>
 
 <!-- Tab Navigation -->
@@ -413,12 +518,7 @@ Process: suspicious_process.exe
 					</div>
 				</div>
 				<div class="card-body p-0">
-					<DocxEditor
-						content={documentContent}
-						placeholder="Start documenting the incident response..."
-						onUpdate={handleDocumentChange}
-						incidentData={incident}
-					/>
+					<DocxEditor />
 				</div>
 			</div>
 		</div>
@@ -435,196 +535,89 @@ Process: suspicious_process.exe
 					</div>
 				</div>
 				<div class="card-body">
-					<div class="space-y-6">
-						<!-- Question 1: How was the incident discovered -->
-						<div class="card border bg-base-200">
-							<div class="card-body">
-								<h3 class="card-title text-lg">1. How was the ransomware incident discovered?</h3>
-								<p class="mb-4 text-base-content/70">
-									Describe how you first became aware of the ransomware attack.
-								</p>
-								<div class="form-control">
-									<div class="rounded border bg-base-100 p-3">User reported encrypted files</div>
-								</div>
-							</div>
-						</div>
+					<div class="space-y-4">
+						{#each questionRows as row, rowIndex}
+							<div
+								class="grid gap-4 {row.length === 1
+									? 'grid-cols-1'
+									: row.length === 2
+										? 'grid-cols-1 md:grid-cols-2'
+										: 'grid-cols-1 md:grid-cols-3'}"
+							>
+								{#each row as question}
+									<div
+										class="card border border-base-300 bg-base-200 shadow-md {question.width ===
+										'full'
+											? 'md:col-span-full'
+											: question.width === 'half'
+												? 'md:col-span-1'
+												: 'md:col-span-1'}"
+									>
+										<div class="card-body p-4">
+											<div class="form-control">
+												<!-- svelte-ignore a11y_label_has_associated_control -->
+												<label class="label mb-3">
+													<span class="label-text font-medium">
+														{question.title}
+														{#if question.required}
+															<span class="text-error">*</span>
+														{/if}
+													</span>
+												</label>
+												{#if question.description}
+													<p class="mb-2 text-sm text-base-content/60">{question.description}</p>
+												{/if}
 
-						<!-- Question 2: Discovery time -->
-						<div class="card border bg-base-200">
-							<div class="card-body">
-								<h3 class="card-title text-lg">2. When was the incident first discovered?</h3>
-								<p class="mb-4 text-base-content/70">
-									Provide the date and time when the ransomware was first detected.
-								</p>
-								<div class="form-control">
-									<div class="rounded border bg-base-100 p-3">
-										{incident.created.toLocaleString()}
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Question 3: Affected systems -->
-						<div class="card border bg-base-200">
-							<div class="card-body">
-								<h3 class="card-title text-lg">3. Which systems are affected?</h3>
-								<p class="mb-4 text-base-content/70">
-									List all systems, servers, or devices that appear to be compromised or encrypted.
-								</p>
-								<div class="form-control">
-									<div class="min-h-24 rounded border bg-base-100 p-3">
-										• Finance Department Workstations (10 machines)<br />
-										• File Server: FS-FINANCE-01<br />
-										• Database Server: DB-CUSTOMER-02<br />
-										• Backup System: BACKUP-SRV-01 (partially affected)
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Question 4: Ransom note -->
-						<div class="card border bg-base-200">
-							<div class="card-body">
-								<h3 class="card-title text-lg">4. Was a ransom note found?</h3>
-								<p class="mb-4 text-base-content/70">
-									Indicate if attackers left any ransom demands or instructions.
-								</p>
-								<div class="form-control">
-									<div class="rounded border bg-base-100 p-3">Yes</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Question 5: Ransom details -->
-						<div class="card border bg-base-200">
-							<div class="card-body">
-								<h3 class="card-title text-lg">5. Ransom note details</h3>
-								<p class="mb-4 text-base-content/70">
-									If a ransom note was found, provide the content or key details (amount demanded,
-									payment method, deadline, etc.).
-								</p>
-								<div class="form-control">
-									<div class="min-h-24 rounded border bg-base-100 p-3">
-										Ransom demand: 5.2 Bitcoin (~$280,000 USD)<br />
-										Payment deadline: 72 hours from encryption<br />
-										Payment method: Bitcoin wallet address provided<br />
-										Contact: TOR-based email address<br />
-										Threat: Data deletion after deadline expires
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Question 6: Data encrypted -->
-						<div class="card border bg-base-200">
-							<div class="card-body">
-								<h3 class="card-title text-lg">6. What types of data appear to be encrypted?</h3>
-								<p class="mb-4 text-base-content/70">
-									Select all types of data that have been affected by the encryption.
-								</p>
-								<div class="form-control">
-									<div class="rounded border bg-base-100 p-3">
-										<div class="space-y-2">
-											<div class="flex items-center gap-2">
-												<span class="badge badge-sm badge-primary">✓</span> Documents and files
-											</div>
-											<div class="flex items-center gap-2">
-												<span class="badge badge-sm badge-primary">✓</span> Database files
-											</div>
-											<div class="flex items-center gap-2">
-												<span class="badge badge-sm badge-primary">✓</span> Financial records
-											</div>
-											<div class="flex items-center gap-2">
-												<span class="badge badge-sm badge-primary">✓</span> Customer data
+												{#if question.type === 'text' || question.type === 'date' || question.type === 'datetime-local'}
+													<div
+														class="input-bordered input input-sm flex w-full items-center bg-base-100"
+													>
+														{#if question.type === 'datetime-local'}
+															{#if typeof question.answer === 'string' && question.answer}
+																{new Date(question.answer).toLocaleString()}
+															{:else}
+																<span class="text-sm text-base-content/60">Invalid date</span>
+															{/if}
+														{:else if Array.isArray(question.answer)}
+															{question.answer.join(', ')}
+														{:else}
+															{question.answer}
+														{/if}
+													</div>
+												{:else if question.type === 'textarea'}
+													<div
+														class="textarea-bordered textarea min-h-20 w-full bg-base-100 textarea-sm whitespace-pre-line"
+													>
+														{question.answer}
+													</div>
+												{:else if question.type === 'select'}
+													<div
+														class="select-bordered select flex w-full items-center bg-base-100 select-sm"
+													>
+														{question.answer}
+													</div>
+												{:else if question.type === 'radio'}
+													<div class="rounded bg-base-100 p-3">
+														<span class="text-sm font-medium">{question.answer}</span>
+													</div>
+												{:else if question.type === 'checkbox'}
+													<div class="rounded bg-base-100 p-3">
+														<div class="space-y-2">
+															{#each Array.isArray(question.answer) ? question.answer : [] as selectedOption}
+																<div class="flex items-center gap-2">
+																	<span class="badge badge-sm badge-primary">✓</span>
+																	<span class="text-sm">{selectedOption}</span>
+																</div>
+															{/each}
+														</div>
+													</div>
+												{/if}
 											</div>
 										</div>
 									</div>
-								</div>
+								{/each}
 							</div>
-						</div>
-
-						<!-- Question 7: Backup status -->
-						<div class="card border bg-base-200">
-							<div class="card-body">
-								<h3 class="card-title text-lg">7. What is the status of your backups?</h3>
-								<p class="mb-4 text-base-content/70">
-									Indicate the current state of your backup systems and data recovery options.
-								</p>
-								<div class="form-control">
-									<div class="rounded border bg-base-100 p-3">
-										Backups available but not verified
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Question 8: Network isolation -->
-						<div class="card border bg-base-200">
-							<div class="card-body">
-								<h3 class="card-title text-lg">
-									8. Have affected systems been isolated from the network?
-								</h3>
-								<p class="mb-4 text-base-content/70">
-									Indicate if containment measures have been implemented.
-								</p>
-								<div class="form-control">
-									<div class="rounded border bg-base-100 p-3">Yes, fully isolated</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Question 9: Business impact -->
-						<div class="card border bg-base-200">
-							<div class="card-body">
-								<h3 class="card-title text-lg">9. Current business impact</h3>
-								<p class="mb-4 text-base-content/70">
-									Describe how the incident is currently affecting business operations.
-								</p>
-								<div class="form-control">
-									<div class="min-h-24 rounded border bg-base-100 p-3">
-										Significant impact on finance department operations. Unable to process payroll,
-										accounts payable, and financial reporting. Customer billing systems offline.
-										Estimated revenue impact: $50,000 per day of downtime.
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Question 10: Attack vector -->
-						<div class="card border bg-base-200">
-							<div class="card-body">
-								<h3 class="card-title text-lg">10. Suspected attack vector</h3>
-								<p class="mb-4 text-base-content/70">
-									If known, how do you believe the attackers gained initial access?
-								</p>
-								<div class="form-control">
-									<div class="rounded border bg-base-100 p-3">Phishing email</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Submission info -->
-						<div class="card border bg-base-300">
-							<div class="card-body">
-								<h3 class="card-title text-lg">Report Submission Details</h3>
-								<div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-									<div>
-										<span class="font-medium">Submitted by:</span> Jane Smith (Security Analyst)
-									</div>
-									<div>
-										<span class="font-medium">Submission time:</span>
-										{incident.created.toLocaleString()}
-									</div>
-									<div>
-										<span class="font-medium">Report ID:</span> #{incident.id}-INITIAL
-									</div>
-									<div>
-										<span class="font-medium">Status:</span>
-										<span class="badge badge-sm badge-success">Submitted</span>
-									</div>
-								</div>
-							</div>
-						</div>
+						{/each}
 					</div>
 				</div>
 			</div>
@@ -688,6 +681,7 @@ Process: suspicious_process.exe
 						placeholder="Type a message... (Enter to send)"
 						rows="1"
 					></textarea>
+					<!-- svelte-ignore a11y_consider_explicit_label -->
 					<button
 						class="btn btn-square btn-primary"
 						on:click={sendMessage}

@@ -80,16 +80,16 @@
 		<aside class="flex min-h-full w-80 flex-col bg-base-200 p-4">
 			<!-- App Logo/Title -->
 			<div class="mb-6 flex items-center">
-				<div class="mr-3 flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-					<svg class="h-5 w-5 text-primary-content" fill="currentColor" viewBox="0 0 20 20">
-						<path
-							fill-rule="evenodd"
-							d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-							clip-rule="evenodd"
-						></path>
-					</svg>
+				<div
+					class="mr-3 flex h-10 w-10 items-center justify-center rounded-lg bg-white p-0 shadow-md"
+				>
+					<img
+						src="/bobolink_no_text.png"
+						alt="BoboLink Logo"
+						class="h-full w-full translate-y-1 scale-200 object-contain"
+					/>
 				</div>
-				<span class="text-lg font-bold">BoboLink</span>
+				<span class="text-lg font-bold">Bobolink</span>
 			</div>
 
 			<!-- Navigation Menu -->
@@ -118,7 +118,9 @@
 			<div class="mt-auto border-t border-base-300 pt-4">
 				<div class="mb-3 flex items-center">
 					<div class="placeholder avatar mr-3">
-						<div class="w-10 rounded-full bg-neutral text-neutral-content">
+						<div
+							class="flex w-10 items-center justify-center rounded-full bg-neutral text-neutral-content"
+						>
 							<span class="text-sm"
 								>{user.name
 									.split(' ')

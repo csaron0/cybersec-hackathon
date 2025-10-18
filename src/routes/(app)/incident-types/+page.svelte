@@ -299,32 +299,24 @@
 
 <!-- Stats Overview -->
 <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
-	<div
-		class="stat rounded-lg bg-gradient-to-br from-base-100 to-base-200/30 shadow-lg transition-shadow hover:shadow-xl"
-	>
+	<div class="stat rounded-lg bg-base-200 shadow-lg transition-shadow hover:shadow-xl">
 		<div class="stat-title">Total Types</div>
 		<div class="stat-value text-primary">{incidentTypes.length}</div>
 		<div class="stat-desc">Configured incident types</div>
 	</div>
-	<div
-		class="stat rounded-lg bg-gradient-to-br from-base-100 to-base-200/30 shadow-lg transition-shadow hover:shadow-xl"
-	>
+	<div class="stat rounded-lg bg-base-200 shadow-lg transition-shadow hover:shadow-xl">
 		<div class="stat-title">Critical Types</div>
 		<div class="stat-value text-error">
 			{incidentTypes.filter((t) => t.severity === 'Critical').length}
 		</div>
 		<div class="stat-desc">High-priority incidents</div>
 	</div>
-	<div
-		class="stat rounded-lg bg-gradient-to-br from-base-100 to-base-200/30 shadow-lg transition-shadow hover:shadow-xl"
-	>
+	<div class="stat rounded-lg bg-base-200 shadow-lg transition-shadow hover:shadow-xl">
 		<div class="stat-title">Auto-Alerts</div>
 		<div class="stat-value text-success">{incidentTypes.filter((t) => t.autoAlerts).length}</div>
 		<div class="stat-desc">With automatic notifications</div>
 	</div>
-	<div
-		class="stat rounded-lg bg-gradient-to-br from-base-100 to-base-200/30 shadow-lg transition-shadow hover:shadow-xl"
-	>
+	<div class="stat rounded-lg bg-base-200 shadow-lg transition-shadow hover:shadow-xl">
 		<div class="stat-title">Avg SLA</div>
 		<div class="stat-value text-info">
 			{Math.round(incidentTypes.reduce((sum, t) => sum + t.slaHours, 0) / incidentTypes.length)}h
@@ -429,19 +421,19 @@
 
 								<div class="mt-4 flex gap-2">
 									<button
-										class="btn border-none bg-gradient-to-r from-base-100 to-base-200 shadow-lg transition-shadow btn-sm hover:shadow-xl"
+										class="btn border-none bg-base-200 shadow-md transition-shadow btn-sm hover:shadow-lg"
 										on:click={() => navigateToFormBuilder(type.id)}
 									>
 										📝 Form Builder
 									</button>
 									<button
-										class="btn border-none bg-gradient-to-r from-base-100 to-base-200 shadow-lg transition-shadow btn-sm hover:shadow-xl"
+										class="btn border-none bg-base-200 shadow-md transition-shadow btn-sm hover:shadow-lg"
 										on:click={() => navigateToTemplateEditor(type.id)}
 									>
 										📄 Template Editor
 									</button>
 									<button
-										class="btn border-none bg-gradient-to-r from-base-100 to-base-200 shadow-lg transition-shadow btn-sm hover:shadow-xl"
+										class="btn border-none bg-base-200 shadow-md transition-shadow btn-sm hover:shadow-lg"
 										on:click={() => navigateToPersonnelManager(type.id)}
 									>
 										👥 Personnel Manager
@@ -603,6 +595,7 @@
 					</div>
 
 					<div class="form-control">
+						<!-- svelte-ignore a11y_label_has_associated_control -->
 						<label class="label">
 							<span class="label-text">Auto-Alerts</span>
 						</label>

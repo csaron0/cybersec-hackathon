@@ -118,7 +118,7 @@
 <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 	{#each incidentTypes as incident}
 		<div
-			class="card cursor-pointer bg-base-100 shadow-xl transition-shadow hover:shadow-2xl"
+			class="card cursor-pointer bg-base-200 shadow-xl transition-shadow hover:shadow-2xl"
 			on:click={() => handleIncidentTypeClick(incident.id)}
 			on:keydown={(e) => e.key === 'Enter' && handleIncidentTypeClick(incident.id)}
 			role="button"

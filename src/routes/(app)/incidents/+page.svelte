@@ -20,7 +20,7 @@
 		{
 			id: '1',
 			title: 'Ransomware Attack - Finance Department',
-			status: 'Drafting',
+			status: 'Initial Triage & Technical Review',
 			priority: 'Critical',
 			assignee: 'Security Team Alpha',
 			created: new Date('2024-10-17T09:30:00'),
@@ -31,7 +31,7 @@
 		{
 			id: '2',
 			title: 'Phishing Campaign - HR Department',
-			status: 'Finalizing',
+			status: 'Communications Drafting',
 			priority: 'High',
 			assignee: 'Jane Smith',
 			created: new Date('2024-10-17T11:15:00'),
@@ -42,7 +42,7 @@
 		{
 			id: '3',
 			title: 'Data Breach - Customer Database',
-			status: 'Approval',
+			status: 'Legal & Regulatory Assessment',
 			priority: 'Critical',
 			assignee: 'Security Team Beta',
 			created: new Date('2024-10-17T14:20:00'),
@@ -53,7 +53,7 @@
 		{
 			id: '4',
 			title: 'DDoS Attack - Web Services',
-			status: 'Approved',
+			status: 'Management Approval',
 			priority: 'High',
 			assignee: 'Network Team',
 			created: new Date('2024-10-18T07:45:00'),
@@ -64,7 +64,7 @@
 		{
 			id: '5',
 			title: 'Insider Threat - Suspicious Activity',
-			status: 'Closed',
+			status: 'Post-Incident Review & Closure',
 			priority: 'Medium',
 			assignee: 'Security Team Alpha',
 			created: new Date('2024-10-18T10:20:00'),
@@ -80,16 +80,22 @@
 
 	function getStatusClass(status: string): string {
 		switch (status.toLowerCase()) {
-			case 'drafting':
-				return 'badge-info';
-			case 'finalizing':
+			case 'incident opened':
+				return 'badge-error';
+			case 'initial triage & technical review':
 				return 'badge-warning';
-			case 'approval':
+			case 'legal & regulatory assessment':
 				return 'badge-secondary';
-			case 'approved':
+			case 'communications drafting':
+				return 'badge-info';
+			case 'management approval':
+				return 'badge-accent';
+			case 'external notification & publication':
+				return 'badge-primary';
+			case 'ongoing updates & monitoring':
+				return 'badge-warning';
+			case 'post-incident review & closure':
 				return 'badge-success';
-			case 'closed':
-				return 'badge-neutral';
 			default:
 				return 'badge-neutral';
 		}
