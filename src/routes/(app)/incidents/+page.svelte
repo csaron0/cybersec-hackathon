@@ -20,7 +20,7 @@
 		{
 			id: '1',
 			title: 'Ransomware Attack - Finance Department',
-			status: 'Critical',
+			status: 'Drafting',
 			priority: 'Critical',
 			assignee: 'Security Team Alpha',
 			created: new Date('2024-10-17T09:30:00'),
@@ -31,7 +31,7 @@
 		{
 			id: '2',
 			title: 'Phishing Campaign - HR Department',
-			status: 'Investigating',
+			status: 'Finalizing',
 			priority: 'High',
 			assignee: 'Jane Smith',
 			created: new Date('2024-10-17T11:15:00'),
@@ -42,7 +42,7 @@
 		{
 			id: '3',
 			title: 'Data Breach - Customer Database',
-			status: 'Contained',
+			status: 'Approval',
 			priority: 'Critical',
 			assignee: 'Security Team Beta',
 			created: new Date('2024-10-17T14:20:00'),
@@ -53,7 +53,7 @@
 		{
 			id: '4',
 			title: 'DDoS Attack - Web Services',
-			status: 'Mitigating',
+			status: 'Approved',
 			priority: 'High',
 			assignee: 'Network Team',
 			created: new Date('2024-10-18T07:45:00'),
@@ -64,7 +64,7 @@
 		{
 			id: '5',
 			title: 'Insider Threat - Suspicious Activity',
-			status: 'Under Review',
+			status: 'Closed',
 			priority: 'Medium',
 			assignee: 'Security Team Alpha',
 			created: new Date('2024-10-18T10:20:00'),
@@ -80,16 +80,16 @@
 
 	function getStatusClass(status: string): string {
 		switch (status.toLowerCase()) {
-			case 'critical':
-				return 'badge-error';
-			case 'investigating':
-			case 'mitigating':
-				return 'badge-warning';
-			case 'contained':
-			case 'resolved':
-				return 'badge-success';
-			case 'under review':
+			case 'drafting':
 				return 'badge-info';
+			case 'finalizing':
+				return 'badge-warning';
+			case 'approval':
+				return 'badge-secondary';
+			case 'approved':
+				return 'badge-success';
+			case 'closed':
+				return 'badge-neutral';
 			default:
 				return 'badge-neutral';
 		}
@@ -211,11 +211,11 @@
 						bind:value={statusFilter}
 					>
 						<option value="all">All Statuses</option>
-						<option value="critical">Critical</option>
-						<option value="investigating">Investigating</option>
-						<option value="contained">Contained</option>
-						<option value="mitigating">Mitigating</option>
-						<option value="under review">Under Review</option>
+						<option value="drafting">Drafting</option>
+						<option value="finalizing">Finalizing</option>
+						<option value="approval">Approval</option>
+						<option value="approved">Approved</option>
+						<option value="closed">Closed</option>
 					</select>
 				</div>
 
@@ -320,19 +320,6 @@
 							</div>
 
 							<div class="flex items-center gap-2">
-								<div class="tooltip" data-tip="Real-time chat available">
-									<div class="badge badge-sm badge-success">
-										<svg class="mr-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												stroke-width="2"
-												d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-											/>
-										</svg>
-										Live
-									</div>
-								</div>
 								<svg
 									class="h-5 w-5 text-base-content/50"
 									fill="none"

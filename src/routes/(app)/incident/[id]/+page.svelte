@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import DocxEditor from '$lib/components/DocxEditor.svelte';
+	import IncidentWorkflow from '$lib/components/IncidentWorkflow.svelte';
 	// Types
 	interface ChatMessage {
 		id: string;
@@ -59,7 +60,7 @@
 			'1': {
 				id: '1',
 				title: 'Ransomware Attack - Finance Department',
-				status: 'Critical',
+				status: 'Drafting',
 				priority: 'Critical',
 				assignee: 'Security Team Alpha',
 				created: new Date('2024-10-17T09:30:00'),
@@ -69,7 +70,7 @@
 			'2': {
 				id: '2',
 				title: 'Phishing Campaign - HR Department',
-				status: 'Investigating',
+				status: 'Finalizing',
 				priority: 'High',
 				assignee: 'Jane Smith',
 				created: new Date('2024-10-17T11:15:00'),
@@ -79,11 +80,29 @@
 			'3': {
 				id: '3',
 				title: 'Data Breach - Customer Database',
-				status: 'Contained',
+				status: 'Approval',
 				priority: 'Critical',
 				assignee: 'Security Team Beta',
 				created: new Date('2024-10-17T14:20:00'),
 				description: 'Unauthorized access detected to customer database. Investigation ongoing.'
+			},
+			'4': {
+				id: '4',
+				title: 'DDoS Attack - Web Services',
+				status: 'Approved',
+				priority: 'High',
+				assignee: 'Network Team',
+				created: new Date('2024-10-18T07:45:00'),
+				description: 'Large-scale distributed denial of service attack targeting our web services.'
+			},
+			'5': {
+				id: '5',
+				title: 'Insider Threat - Suspicious Activity',
+				status: 'Closed',
+				priority: 'Medium',
+				assignee: 'Security Team Alpha',
+				created: new Date('2024-10-18T10:20:00'),
+				description: 'Investigation completed. No malicious activity found.'
 			}
 		};
 
@@ -276,19 +295,40 @@ Process: suspicious_process.exe
 
 	function getStatusClass(status: string): string {
 		switch (status.toLowerCase()) {
-			case 'critical':
-				return 'badge-error';
-			case 'high':
-				return 'badge-warning';
-			case 'investigating':
+			case 'drafting':
 				return 'badge-info';
-			case 'contained':
+			case 'finalizing':
+				return 'badge-warning';
+			case 'approval':
+				return 'badge-secondary';
+			case 'approved':
 				return 'badge-success';
-			case 'open':
-				return 'badge-primary';
+			case 'closed':
+				return 'badge-neutral';
 			default:
 				return 'badge-ghost';
 		}
+	}
+
+	function handleStatusChange(newStatus: string) {
+		// Update the incident status
+		incident.status = newStatus;
+		incident = { ...incident }; // Trigger reactivity
+
+		// In a real app, this would make an API call to update the status
+		console.log(`Status changed to: ${newStatus} for incident ${incidentId}`);
+
+		// Add a system message to chat
+		const systemMessage: ChatMessage = {
+			id: Date.now().toString(),
+			user: 'System',
+			message: `Status changed to: ${newStatus}`,
+			timestamp: new Date(),
+			avatar: '🔄'
+		};
+
+		chatMessages = [...chatMessages, systemMessage];
+		scrollToBottom();
 	}
 </script>
 
@@ -314,6 +354,15 @@ Process: suspicious_process.exe
 			<div class="font-medium">{incident.assignee}</div>
 		</div>
 	</div>
+</div>
+
+<!-- Workflow Component -->
+<div class="mb-6">
+	<IncidentWorkflow
+		currentStatus={incident.status}
+		incidentId={incident.id}
+		onStatusChange={handleStatusChange}
+	/>
 </div>
 
 <!-- Main Content Grid -->
@@ -362,10 +411,6 @@ Process: suspicious_process.exe
 					<h2 class="text-lg font-semibold">Team Chat</h2>
 					<div class="flex items-center gap-2">
 						<span class="badge badge-sm badge-primary">{chatMessages.length}</span>
-						<div class="badge badge-sm badge-success">
-							<div class="h-2 w-2 animate-pulse rounded-full bg-success"></div>
-							<span class="ml-1">Live</span>
-						</div>
 					</div>
 				</div>
 			</div>
