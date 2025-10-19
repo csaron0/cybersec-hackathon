@@ -214,44 +214,73 @@
 					<!-- Press Release Content -->
 					<div class="press-release-content">
 						<h3 class="mb-4 text-xl leading-tight font-bold text-gray-900">
-							[Headline: Company Announces Major Product Launch / Strategic Partnership / Financial
-							Results]
+							Port of Rotterdam Temporarily Implements Manual Operations Following Cybersecurity
+							Incident
 						</h3>
 
 						<p class="mb-4 text-justify leading-relaxed text-gray-800">
-							<strong>[City, State] –</strong> [Opening paragraph with the most important information:
-							who, what, when, where, why. This paragraph should summarize the entire announcement in
-							2-3 sentences.]
+							<strong>Rotterdam, Netherlands –</strong> The Port of Rotterdam Authority announced today
+							that it has temporarily implemented manual operational procedures for cargo handling and
+							vessel traffic management following the detection of malware in select operational systems.
+							The port remains operational with enhanced manual processes while cybersecurity measures
+							are strengthened.
 						</p>
 
 						<p class="mb-4 text-justify leading-relaxed text-gray-800">
-							[Second paragraph providing additional context and details about the announcement.
-							Include quotes from key executives or stakeholders.]
+							At approximately 06:45 CET this morning, port monitoring systems detected unauthorized
+							software on operational technology networks. As a precautionary measure, affected
+							systems were immediately isolated and manual procedures activated to maintain safe and
+							secure port operations. The port's critical infrastructure and safety systems remain
+							fully protected and operational.
 						</p>
 
 						<blockquote class="my-6 border-l-4 border-blue-500 pl-4 text-gray-700 italic">
-							"[Quote from CEO or relevant executive providing insight into the significance of this
-							announcement]," said [Name], [Title] of [Company].
+							"The safety and security of our port operations is our highest priority. While we are
+							experiencing some delays due to manual processing, we are working around the clock to
+							restore full system functionality while maintaining the highest security standards,"
+							said Allard Castelein, CEO of the Port of Rotterdam Authority.
 						</blockquote>
 
 						<p class="mb-4 text-justify leading-relaxed text-gray-800">
-							[Third paragraph with supporting details, background information, or additional
-							context that helps readers understand the importance of the announcement.]
+							Current estimates indicate processing delays of 4-6 hours for container operations and
+							vessel clearances. The port is coordinating closely with shipping lines, logistics
+							partners, and customs authorities to minimize disruption to the supply chain.
+							Alternative arrangements have been made for urgent cargo requiring expedited
+							processing.
 						</p>
 
 						<p class="mb-4 text-justify leading-relaxed text-gray-800">
-							[Additional paragraphs as needed with more details, statistics, or supporting
-							information.]
+							The port authority is working in coordination with Dutch national cybersecurity
+							agencies, international partners, and leading cybersecurity experts to investigate the
+							incident and implement enhanced protective measures. Regular updates will be provided
+							to stakeholders as the situation develops.
+						</p>
+
+						<p class="mb-4 text-justify leading-relaxed text-gray-800">
+							Shipping lines and logistics partners requiring immediate assistance should contact
+							the Port of Rotterdam customer service center at +31 10 252 1010 or visit the customer
+							portal for real-time updates. The port authority expects to provide further updates by
+							18:00 CET today.
 						</p>
 
 						<!-- Company Boilerplate -->
 						<div class="mt-8 border-t border-gray-200 pt-6">
-							<h4 class="mb-2 font-bold text-gray-900">About [Company Name]</h4>
+							<h4 class="mb-2 font-bold text-gray-900">About Port of Rotterdam Authority</h4>
 							<p class="text-justify leading-relaxed text-gray-800">
-								[Standard company description: Founded in [year], [Company] is a leading [industry
-								description]. The company [brief description of what the company does, its mission,
-								and key achievements]. For more information, visit [website].]
+								The Port of Rotterdam Authority is responsible for the development, management, and
+								operation of the Port of Rotterdam, Europe's largest seaport. The port handles over
+								470 million tons of cargo annually and serves as a crucial gateway for trade between
+								Europe and global markets. The port authority is committed to maintaining the
+								highest standards of safety, security, and sustainability in its operations. For
+								more information, visit www.portofrotterdam.com.
 							</p>
+
+							<div class="mt-4 text-sm text-gray-600">
+								<p><strong>Media Contact:</strong></p>
+								<p>Port of Rotterdam Communications Department</p>
+								<p>Phone: +31 10 252 1111</p>
+								<p>Email: communications@portofrotterdam.com</p>
+							</div>
 						</div>
 					</div>
 				</div>

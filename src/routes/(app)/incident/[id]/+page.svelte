@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation';
 	import DocxEditor from '$lib/components/DocxEditor.svelte';
 	import IncidentWorkflow from '$lib/components/IncidentWorkflow.svelte';
+	import { getIncidentById, getStatusName } from '$lib/stores/incidents';
 	// Types
 	interface ChatMessage {
 		id: string;
@@ -40,15 +41,16 @@
 	// Mock incident data
 	let incident = {
 		id: '',
-		title: 'Loading...',
-		statusIndex: 0, // Changed from status string to statusIndex number
-		priority: 'High',
-		assignee: 'Jane Smith',
+		title: 'Port of Rotterdam Malware Disruption',
+		statusIndex: 2, // Investigation phase
+		priority: 'Critical',
+		assignee: 'Maritime Security Team',
 		created: new Date(),
-		description: 'Loading incident details...'
+		description:
+			'Malware infection affecting port logistics systems requiring coordinated multilingual response'
 	};
 
-	// Initial report data structure - populated with mock data
+	// Initial report data structure - populated with Netherlands port authority malware scenario
 	let questionRows: Question[][] = [
 		// Row 1: Discovery basics
 		[
@@ -57,7 +59,7 @@
 				title: 'When discovered?',
 				type: 'datetime-local',
 				required: true,
-				answer: '2024-10-17T09:30',
+				answer: '2024-10-19T06:45',
 				width: 'half'
 			},
 			{
@@ -69,11 +71,11 @@
 					'User report',
 					'Antivirus alert',
 					'Performance issues',
-					'Ransom note',
-					'Monitoring',
+					'System failure',
+					'Monitoring alert',
 					'Other'
 				],
-				answer: 'User report',
+				answer: 'Monitoring alert',
 				width: 'half'
 			}
 		],
@@ -86,104 +88,163 @@
 				type: 'textarea',
 				required: true,
 				answer:
-					'• Finance Department Workstations (10 machines)\n• File Server: FS-FINANCE-01\n• Database Server: DB-CUSTOMER-02\n• Backup System: BACKUP-SRV-01 (partially affected)',
+					'• Terminal Operating System (TOS) - Container tracking affected\n• Port Community System (PCS) - Cargo clearance disrupted\n• Vessel Traffic Management System (VTMS) - Ship scheduling impacted\n• Cargo Handling Equipment Control - 12 cranes offline\n• Gate Access Control Systems - Entry/exit processing delayed',
 				width: 'full'
 			}
 		],
-		// Row 3: Ransom info
+		// Row 3: Malware details
 		[
 			{
-				id: 'ransom_note',
-				title: 'Ransom note found?',
-				type: 'radio',
+				id: 'malware_type',
+				title: 'Malware type detected',
+				type: 'select',
 				required: true,
-				options: ['Yes', 'No', 'Unknown'],
-				answer: 'Yes',
+				options: ['Ransomware', 'Wiper malware', 'Trojan', 'Rootkit', 'Unknown', 'Multiple types'],
+				answer: 'Wiper malware',
 				width: 'third'
 			},
 			{
-				id: 'ransom_amount',
-				title: 'Ransom amount',
-				type: 'text',
-				required: false,
-				answer: '5.2 Bitcoin (~$280,000)',
-				width: 'third'
-			},
-			{
-				id: 'payment_method',
-				title: 'Payment method',
+				id: 'infection_vector',
+				title: 'Suspected infection vector',
 				type: 'select',
 				required: false,
-				options: ['Bitcoin', 'Cryptocurrency', 'Bank transfer', 'Other', 'Unknown'],
-				answer: 'Bitcoin',
+				options: [
+					'Email attachment',
+					'USB device',
+					'Network vulnerability',
+					'Supply chain',
+					'Remote access',
+					'Unknown'
+				],
+				answer: 'Email attachment',
+				width: 'third'
+			},
+			{
+				id: 'spread_pattern',
+				title: 'Spread pattern',
+				type: 'select',
+				required: false,
+				options: ['Lateral movement', 'Targeted systems', 'Random spread', 'Contained', 'Unknown'],
+				answer: 'Lateral movement',
 				width: 'third'
 			}
 		],
-		// Row 4: Data and backups
+		// Row 4: Operational impact
 		[
 			{
-				id: 'data_encrypted',
-				title: 'Encrypted data types',
+				id: 'port_operations',
+				title: 'Port operations affected',
 				type: 'checkbox',
 				required: true,
-				options: ['Documents', 'Databases', 'Email', 'Backups', 'System files', 'Customer data'],
-				answer: ['Documents', 'Databases', 'Customer data'],
+				options: [
+					'Container handling',
+					'Ship scheduling',
+					'Cargo clearance',
+					'Gate operations',
+					'Fuel services',
+					'Logistics coordination'
+				],
+				answer: ['Container handling', 'Ship scheduling', 'Cargo clearance', 'Gate operations'],
 				width: 'half'
 			},
 			{
-				id: 'backup_status',
-				title: 'Backup status',
-				type: 'select',
+				id: 'vessels_impacted',
+				title: 'Vessels currently impacted',
+				type: 'text',
 				required: true,
-				options: [
-					'Available & clean',
-					'Available unverified',
-					'Partially compromised',
-					'Fully compromised',
-					'No backups'
-				],
-				answer: 'Partially compromised',
+				answer: '23 container ships, 8 bulk carriers awaiting clearance',
 				width: 'half'
 			}
 		],
 		// Row 5: Response actions
 		[
 			{
-				id: 'network_isolated',
+				id: 'systems_isolated',
 				title: 'Systems isolated?',
 				type: 'radio',
 				required: true,
-				options: ['Fully isolated', 'Partially isolated', 'No isolation', 'Unknown'],
-				answer: 'Fully isolated',
+				options: [
+					'Fully isolated',
+					'Critical systems only',
+					'Partial isolation',
+					'No isolation',
+					'Unknown'
+				],
+				answer: 'Critical systems only',
 				width: 'half'
 			},
 			{
-				id: 'initial_vector',
-				title: 'Suspected attack vector',
+				id: 'backup_systems',
+				title: 'Backup systems status',
 				type: 'select',
-				required: false,
+				required: true,
 				options: [
-					'Phishing',
-					'Malicious attachment',
-					'Compromised credentials',
-					'RDP',
-					'Vulnerable software',
-					'Unknown'
+					'Fully operational',
+					'Partially operational',
+					'Manual procedures only',
+					'No backup systems',
+					'Under assessment'
 				],
-				answer: 'Phishing',
+				answer: 'Manual procedures only',
 				width: 'half'
 			}
 		],
-		// Row 6: Business impact
+		// Row 6: Communication requirements
+		[
+			{
+				id: 'stakeholder_notifications',
+				title: 'Stakeholder notifications required',
+				type: 'checkbox',
+				required: true,
+				options: [
+					'Port customers',
+					'Shipping lines',
+					'Customs authorities',
+					'Media/Press',
+					'Government agencies',
+					'International partners'
+				],
+				answer: ['Port customers', 'Shipping lines', 'Customs authorities', 'Media/Press'],
+				width: 'full'
+			}
+		],
+		// Row 7: Multilingual requirements
+		[
+			{
+				id: 'languages_required',
+				title: 'Languages for communications',
+				type: 'checkbox',
+				required: true,
+				options: ['Dutch', 'English', 'German', 'French', 'Chinese', 'Spanish'],
+				answer: ['Dutch', 'English', 'German'],
+				width: 'half'
+			},
+			{
+				id: 'priority_communications',
+				title: 'Priority communication channels',
+				type: 'select',
+				required: true,
+				options: [
+					'Press release',
+					'Customer portal',
+					'Direct notifications',
+					'Social media',
+					'All channels'
+				],
+				answer: 'All channels',
+				width: 'half'
+			}
+		],
+		// Row 8: Business impact
 		[
 			{
 				id: 'business_impact',
-				title: 'Business impact',
-				description: 'How is this affecting operations?',
+				title: 'Operational and economic impact',
+				description: 'Describe current and projected impact on port operations',
 				type: 'textarea',
 				required: true,
 				answer:
-					'Finance department operations completely halted. Unable to process payments, invoices, or access customer billing data. Estimated revenue impact: $50,000/day until systems restored.',
+					"Severe disruption to Europe's largest port operations. Container throughput reduced by 75%. Ship delays causing supply chain disruptions across Netherlands, Germany, and Belgium. Estimated economic impact: €15M per day. 31 vessels currently waiting for berths. Manual cargo processing causing 4-6 hour delays. Media attention requiring coordinated multilingual response.",
 				width: 'full'
 			}
 		]
@@ -210,58 +271,10 @@
 	onDestroy(() => {});
 
 	function loadIncidentData() {
-		// Mock incident data based on ID
-		const incidents = {
-			'1': {
-				id: '1',
-				title: 'Ransomware Attack - Finance Department',
-				statusIndex: 1, // Initial Triage & Technical Review
-				priority: 'Critical',
-				assignee: 'Security Team Alpha',
-				created: new Date('2024-10-17T09:30:00'),
-				description:
-					'Multiple workstations in the finance department have been encrypted. Ransom note found on affected systems.'
-			},
-			'2': {
-				id: '2',
-				title: 'Phishing Campaign - HR Department',
-				statusIndex: 3, // Communications Drafting
-				priority: 'High',
-				assignee: 'Jane Smith',
-				created: new Date('2024-10-17T11:15:00'),
-				description:
-					'Employees reported suspicious emails claiming to be from HR with malicious attachments.'
-			},
-			'3': {
-				id: '3',
-				title: 'Data Breach - Customer Database',
-				statusIndex: 2, // Legal & Regulatory Assessment
-				priority: 'Critical',
-				assignee: 'Security Team Beta',
-				created: new Date('2024-10-17T14:20:00'),
-				description: 'Unauthorized access detected to customer database. Investigation ongoing.'
-			},
-			'4': {
-				id: '4',
-				title: 'DDoS Attack - Web Services',
-				statusIndex: 4, // Management Approval
-				priority: 'High',
-				assignee: 'Network Team',
-				created: new Date('2024-10-18T07:45:00'),
-				description: 'Large-scale distributed denial of service attack targeting our web services.'
-			},
-			'5': {
-				id: '5',
-				title: 'Insider Threat - Suspicious Activity',
-				statusIndex: 7, // Post-Incident Review & Closure
-				priority: 'Medium',
-				assignee: 'Security Team Alpha',
-				created: new Date('2024-10-18T10:20:00'),
-				description: 'Investigation completed. No malicious activity found.'
-			}
-		};
+		// Load incident data from centralized store
+		const foundIncident = getIncidentById(incidentId);
 
-		incident = incidents[incidentId as keyof typeof incidents] || {
+		incident = foundIncident || {
 			id: incidentId,
 			title: `Incident #${incidentId}`,
 			statusIndex: 0, // Incident Opened
@@ -277,77 +290,127 @@
 		chatMessages = [
 			{
 				id: '1',
-				user: 'Jane Smith',
+				user: 'Maritime Security Team',
 				message:
-					"I've started investigating this incident. Initial findings suggest this is a targeted attack.",
+					'Malware detected in TOS and PCS systems. Immediate containment initiated. Coordinating with port operations for manual procedures.',
 				timestamp: new Date(Date.now() - 3600000), // 1 hour ago
-				avatar: '👩‍💻'
+				avatar: '⚓'
 			},
 			{
 				id: '2',
-				user: 'Mike Johnson',
+				user: 'Communications Manager',
 				message:
-					"Confirmed. We've isolated the affected systems. No lateral movement detected yet.",
-				timestamp: new Date(Date.now() - 3000000), // 50 minutes ago
-				avatar: '👨‍🔧'
+					'Preparing multilingual statements in Dutch, English, and German. Press briefing scheduled for 14:00. Customer notifications being coordinated.',
+				timestamp: new Date(Date.now() - 3000000) // 50 minutes ago
 			},
 			{
 				id: '3',
-				user: 'Sarah Wilson',
+				user: 'Port Operations Chief',
 				message:
-					"I'm documenting all findings in the shared document. Please review and add your observations.",
+					'23 container ships and 8 bulk carriers currently affected. Switched to manual cargo processing. Estimated 4-6 hour delays. Economic impact assessment ongoing.',
 				timestamp: new Date(Date.now() - 1800000), // 30 minutes ago
-				avatar: '👩‍🔬'
+				avatar: '🚢'
+			},
+			{
+				id: '4',
+				user: 'IT Security',
+				message:
+					'Wiper malware confirmed. Lateral movement contained to operational systems. Critical infrastructure protected. Forensic analysis in progress.',
+				timestamp: new Date(Date.now() - 900000), // 15 minutes ago
+				avatar: '🛡️'
 			}
 		];
 
 		// Load initial document content with markdown formatting
-		documentContent = `# Incident Response Report - ${incident.title}
+		documentContent = `# Incident Response Report - Port of Rotterdam Malware Disruption
 
 ## Incident Overview
 - **ID**: ${incident.id}
-- **Status**: ${workflowComponent?.getStatusName(incident.statusIndex) || 'Loading...'}
+- **Status**: ${workflowComponent?.getStatusName(incident.statusIndex) || 'Investigation & Analysis'}
 - **Priority**: ${incident.priority}
 - **Assigned to**: ${incident.assignee}
 - **Created**: ${incident.created.toLocaleString()}
+- **Location**: Port of Rotterdam, Netherlands
+- **Incident Type**: Critical Infrastructure Malware Attack
 
 ## Description
 ${incident.description}
 
+## Impact Assessment
+- **Operational Impact**: 75% reduction in container throughput
+- **Economic Impact**: €15M per day estimated losses
+- **Vessels Affected**: 31 ships awaiting berth assignments
+- **Systems Compromised**: TOS, PCS, VTMS, Cargo Handling Equipment
+- **International Impact**: Supply chain disruptions across Netherlands, Germany, Belgium
+
+## Multilingual Communication Status
+- **Dutch**: Press release prepared, customer notifications sent
+- **English**: International shipping line communications active
+- **German**: Coordination with German logistics partners ongoing
+- **Press Conference**: Scheduled for 14:00 CET (multilingual)
+
 ## Timeline of Events
-- [x] **${new Date().toLocaleString()}**: Incident reported and investigation initiated
-- [x] **${new Date(Date.now() - 1800000).toLocaleString()}**: Initial assessment completed
-- [x] **${new Date(Date.now() - 900000).toLocaleString()}**: Containment measures implemented
-- [ ] Forensic analysis in progress
+- [x] **06:45 CET**: Malware detected by monitoring systems
+- [x] **07:15 CET**: Critical systems isolation initiated
+- [x] **07:45 CET**: Manual procedures activated
+- [x] **08:30 CET**: Stakeholder notifications begun
+- [x] **09:00 CET**: Media response team activated
+- [x] **10:30 CET**: International coordination established
+- [ ] **14:00 CET**: Press conference scheduled
+- [ ] **EOD**: Full system assessment completion target
 
 ## Technical Analysis
-> *Add your technical findings here...*
+### Malware Characteristics
+- **Type**: Wiper malware with lateral movement capabilities
+- **Vector**: Email attachment (under investigation)
+- **Scope**: Operational technology (OT) systems primarily affected
+- **Containment**: Critical infrastructure protected, manual operations in effect
+
+### Systems Status
+- **Terminal Operating System (TOS)**: Offline - manual processing active
+- **Port Community System (PCS)**: Degraded - critical functions manual
+- **Vessel Traffic Management (VTMS)**: Backup systems operational
+- **Cargo Handling Equipment**: 12 cranes offline, manual operations
 
 ### Indicators of Compromise (IOCs)
 \`\`\`
-File Hash: d41d8cd98f00b204e9800998ecf8427e
-IP Address: 192.168.1.100
-Domain: malicious-domain.com
-Process: suspicious_process.exe
+File Hash: 7b42b35f2f5e8c9a1d3f2e4b6c8d9a0e1f2b3c4d
+IP Address: 185.220.101.42 (suspected C&C)
+Domain: logistics-update[.]nl (typosquatting)
+Process: ContainerUpdate.exe (malicious payload)
 \`\`\`
 
-## Impact Assessment
-*Document the impact and affected systems...*
+## Stakeholder Communications
+### Internal
+- Port Authority executive team briefed
+- Operations teams coordinating manual procedures
+- IT security conducting forensic analysis
+
+### External
+- Shipping lines notified of delays and alternate procedures
+- Customs authorities coordinated for expedited processing
+- Government agencies (Ministry of Infrastructure) informed
+- EU partners alerted for supply chain contingencies
 
 ## Response Actions Taken
-- [x] Isolated affected systems
-- [x] Preserved evidence
-- [x] Initiated communication protocols
-- [ ] Complete forensic analysis
-- [ ] Update security policies
-- [ ] Conduct team debrief
+- [x] Isolated operational technology systems
+- [x] Activated manual cargo processing procedures
+- [x] Initiated multilingual stakeholder communications
+- [x] Coordinated with national cybersecurity authorities
+- [x] Preserved forensic evidence
+- [ ] Complete malware analysis
+- [ ] System restoration and testing
+- [ ] Post-incident review and policy updates
 
-## Notes
-*Use this section for any additional observations or notes...*
+## Recovery Strategy
+1. **Immediate**: Maintain manual operations while systems are restored
+2. **Short-term**: Selective system restoration with enhanced monitoring
+3. **Long-term**: Infrastructure hardening and resilience improvements
 
 ---
-
-**Last updated:** ${new Date().toLocaleString()} by ${currentUser}`;
+*Document updated: ${new Date().toLocaleString()} CET*
+*Next update scheduled: ${new Date(Date.now() + 3600000).toLocaleString()} CET*
+`;
 
 		scrollToBottom();
 	}

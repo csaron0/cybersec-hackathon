@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { getActiveIncidentsWithStatus, getStatusColor } from '$lib/stores/incidents';
 
 	onMount(() => {
 		const email = localStorage.getItem('email');
@@ -15,90 +16,16 @@
 		lastLogin: new Date('2024-10-17T08:30:00').toLocaleDateString()
 	};
 
-	// Active incidents that can be accessed
-	const activeIncidents = [
-		{
-			id: '1',
-			title: 'Ransomware Attack - Finance Department',
-			status: 'Initial Triage & Technical Review',
-			priority: 'Critical',
-			assignee: 'Security Team Alpha',
-			created: new Date('2024-10-17T09:30:00'),
-			type: 'ransomware',
-			description:
-				'Suspicious encryption activity detected on multiple workstations in the finance department. Immediate containment measures are in effect.'
-		},
-		{
-			id: '2',
-			title: 'Phishing Campaign - HR Department',
-			status: 'Communications Drafting',
-			priority: 'High',
-			assignee: 'Jane Smith',
-			created: new Date('2024-10-17T11:15:00'),
-			type: 'phishing',
-			description:
-				'Multiple employees received suspicious emails claiming to be from HR requesting credential updates.'
-		},
-		{
-			id: '3',
-			title: 'Data Breach - Customer Database',
-			status: 'Legal & Regulatory Assessment',
-			priority: 'Critical',
-			assignee: 'Security Team Beta',
-			created: new Date('2024-10-17T14:20:00'),
-			type: 'data-breach',
-			description:
-				'Unauthorized access detected to customer database. Access has been revoked and forensic analysis is underway.'
-		},
-		{
-			id: '4',
-			title: 'DDoS Attack - Web Services',
-			status: 'Management Approval',
-			priority: 'High',
-			assignee: 'Network Team',
-			created: new Date('2024-10-18T07:45:00'),
-			type: 'ddos',
-			description:
-				'Large-scale distributed denial of service attack targeting our web services. Traffic filtering is active.'
-		},
-		{
-			id: '5',
-			title: 'Insider Threat - Suspicious Activity',
-			status: 'Post-Incident Review & Closure',
-			priority: 'Medium',
-			assignee: 'Security Team Alpha',
-			created: new Date('2024-10-18T10:20:00'),
-			type: 'insider-threat',
-			description:
-				'Unusual data access patterns detected for employee ID 4521. Investigation in progress.'
-		}
-	];
+	// Get active incidents from centralized store
+	const activeIncidents = getActiveIncidentsWithStatus();
 
 	function handleActiveIncidentClick(incidentId: string) {
 		goto(`/incident/${incidentId}`);
 	}
 
-	function getStatusClass(status: string): string {
-		switch (status.toLowerCase()) {
-			case 'incident opened':
-				return 'badge-error';
-			case 'initial triage & technical review':
-				return 'badge-warning';
-			case 'legal & regulatory assessment':
-				return 'badge-secondary';
-			case 'communications drafting':
-				return 'badge-info';
-			case 'management approval':
-				return 'badge-accent';
-			case 'external notification & publication':
-				return 'badge-primary';
-			case 'ongoing updates & monitoring':
-				return 'badge-warning';
-			case 'post-incident review & closure':
-				return 'badge-success';
-			default:
-				return 'badge-neutral';
-		}
+	function getStatusClass(statusIndex: number): string {
+		const color = getStatusColor(statusIndex);
+		return `badge-${color}`;
 	}
 
 	function getPriorityClass(priority: string): string {
@@ -137,7 +64,7 @@
 
 	$: filteredIncidents = activeIncidents.filter((incident) => {
 		const matchesStatus =
-			statusFilter === 'all' || incident.status.toLowerCase() === statusFilter.toLowerCase();
+			statusFilter === 'all' || incident.statusName.toLowerCase() === statusFilter.toLowerCase();
 		const matchesPriority =
 			priorityFilter === 'all' || incident.priority.toLowerCase() === priorityFilter.toLowerCase();
 		const matchesSearch =
@@ -280,7 +207,9 @@
 							<div class="flex-1">
 								<div class="mb-3 flex flex-wrap items-center gap-3">
 									<h3 class="card-title text-lg">{incident.title}</h3>
-									<span class="badge {getStatusClass(incident.status)}">{incident.status}</span>
+									<span class="badge {getStatusClass(incident.statusIndex)}"
+										>{incident.statusName}</span
+									>
 									<span class="badge {getPriorityClass(incident.priority)}"
 										>{incident.priority}</span
 									>
