@@ -321,6 +321,17 @@ Process: ContainerUpdate.exe (malicious payload)
 	<div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
 		<!-- Incident Info -->
 		<div class="lg:col-span-2">
+			<button class="btn mb-2 btn-ghost" on:click={() => history.back()}>
+				<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M10 19l-7-7m0 0l7-7m7 7h18"
+					/>
+				</svg>
+				Back
+			</button>
 			<div class="flex items-center justify-between">
 				<div>
 					<h1 class="text-2xl font-bold">{incident.title}</h1>
@@ -340,7 +351,7 @@ Process: ContainerUpdate.exe (malicious payload)
 		</div>
 
 		<!-- Incident Clock -->
-		<div class="flex justify-center lg:justify-end">
+		<div class="mt-3 flex justify-center lg:justify-end">
 			<IncidentClock
 				discoveryTime={incident.created}
 				size="md"
@@ -374,266 +385,260 @@ Process: ContainerUpdate.exe (malicious payload)
 	</div>
 </div>
 
-<!-- Main Content Grid -->
-<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-	{#if activeTab === 'documentation'}
-		<!-- Document Editor - Takes up 2 columns on large screens -->
-		<div class="lg:col-span-2">
-			<div class="card bg-base-100 shadow-xl">
-				<div class="card-header">
-					<div class="flex items-center justify-between border-b border-base-300 p-4">
-						<h2 class="text-lg font-semibold">Incident Documentation</h2>
-						<div class="flex items-center gap-2">
-							{#if isTyping}
-								<span class="loading loading-sm loading-dots"></span>
-								<span class="text-xs text-base-content/60">Someone is typing...</span>
-							{/if}
-							<div class="badge badge-sm badge-success">
-								<svg class="mr-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M5 13l4 4L19 7"
-									/>
-								</svg>
-								Auto-saved
+<!-- Main Content Container with Fixed Height -->
+<div class="flex flex-col" style="height: calc(100vh - 4rem);">
+	<!-- Content Grid -->
+	<div class="grid min-h-0 flex-1 grid-cols-1 gap-6 lg:grid-cols-3">
+		{#if activeTab === 'documentation'}
+			<!-- Document Editor - Takes up 2 columns on large screens -->
+			<div class="flex min-h-0 flex-col lg:col-span-2">
+				<div class="card flex min-h-0 flex-1 flex-col bg-base-100 shadow-xl">
+					<div class="card-header flex-shrink-0">
+						<div class="flex items-center justify-between border-b border-base-300 p-4">
+							<h2 class="text-lg font-semibold">Incident Documentation</h2>
+							<div class="flex items-center gap-2">
+								{#if isTyping}
+									<span class="loading loading-sm loading-dots"></span>
+									<span class="text-xs text-base-content/60">Someone is typing...</span>
+								{/if}
+								<div class="badge badge-sm badge-success">
+									<svg class="mr-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M5 13l4 4L19 7"
+										/>
+									</svg>
+									Auto-saved
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="card-body p-0">
-					<DocxEditor />
-				</div>
-			</div>
-		</div>
-	{:else if activeTab === 'initial-report'}
-		<!-- Initial Report View - Takes up 2 columns on large screens -->
-		<div class="lg:col-span-2">
-			<div class="card bg-base-100 shadow-xl">
-				<div class="card-header">
-					<div class="flex items-center justify-between border-b border-base-300 p-4">
-						<h2 class="text-lg font-semibold">Initial Incident Report</h2>
-						<div class="flex items-center gap-2">
-							<div class="badge badge-sm badge-info">Read-only</div>
+					<div class="card-body flex-1 overflow-hidden p-0">
+						<div class="h-full overflow-y-auto">
+							<DocxEditor />
 						</div>
 					</div>
 				</div>
-				<div class="card-body">
-					<div class="space-y-4">
-						{#each questionRows as row, rowIndex}
-							<div
-								class="grid gap-4 {row.length === 1
-									? 'grid-cols-1'
-									: row.length === 2
-										? 'grid-cols-1 md:grid-cols-2'
-										: 'grid-cols-1 md:grid-cols-3'}"
-							>
-								{#each row as question}
-									<div
-										class="card border border-base-300 bg-base-200 shadow-md {question.width ===
-										'full'
-											? 'md:col-span-full'
-											: question.width === 'half'
-												? 'md:col-span-1'
-												: 'md:col-span-1'}"
-									>
-										<div class="card-body p-4">
-											<div class="form-control">
-												<!-- svelte-ignore a11y_label_has_associated_control -->
-												<label class="label mb-3">
-													<span class="label-text font-medium">
-														{question.title}
-														{#if question.required}
-															<span class="text-error">*</span>
-														{/if}
-													</span>
-												</label>
-												{#if question.description}
-													<p class="mb-2 text-sm text-base-content/60">{question.description}</p>
-												{/if}
-
-												{#if question.type === 'text' || question.type === 'date' || question.type === 'datetime-local'}
-													<div
-														class="input-bordered input input-sm flex w-full items-center bg-base-100"
-													>
-														{#if question.type === 'datetime-local'}
-															{#if typeof question.answer === 'string' && question.answer}
-																{new Date(question.answer).toLocaleString()}
-															{:else}
-																<span class="text-sm text-base-content/60">Invalid date</span>
+			</div>
+		{:else if activeTab === 'initial-report'}
+			<!-- Initial Report View - Takes up 2 columns on large screens -->
+			<div class="flex min-h-0 flex-col lg:col-span-2">
+				<div class="card flex min-h-0 flex-1 flex-col bg-base-100 shadow-xl">
+					<div class="card-header flex-shrink-0">
+						<div class="flex items-center justify-between border-b border-base-300 p-4">
+							<h2 class="text-lg font-semibold">Initial Incident Report</h2>
+							<div class="flex items-center gap-2">
+								<div class="badge badge-sm badge-info">Read-only</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body flex-1 overflow-y-auto">
+						<div class="space-y-4">
+							{#each questionRows as row, rowIndex}
+								<div
+									class="grid gap-4 {row.length === 1
+										? 'grid-cols-1'
+										: row.length === 2
+											? 'grid-cols-1 md:grid-cols-2'
+											: 'grid-cols-1 md:grid-cols-3'}"
+								>
+									{#each row as question}
+										<div
+											class="card border border-base-300 bg-base-200 shadow-md {question.width ===
+											'full'
+												? 'md:col-span-full'
+												: question.width === 'half'
+													? 'md:col-span-1'
+													: 'md:col-span-1'}"
+										>
+											<div class="card-body p-4">
+												<div class="form-control">
+													<!-- svelte-ignore a11y_label_has_associated_control -->
+													<label class="label mb-3">
+														<span class="label-text font-medium">
+															{question.title}
+															{#if question.required}
+																<span class="text-error">*</span>
 															{/if}
-														{:else if Array.isArray(question.answer)}
-															{question.answer.join(', ')}
-														{:else}
-															{question.answer}
-														{/if}
-													</div>
-												{:else if question.type === 'textarea'}
-													<div
-														class="textarea-bordered textarea min-h-20 w-full bg-base-100 textarea-sm whitespace-pre-line"
-													>
-														{question.answer}
-													</div>
-												{:else if question.type === 'select'}
-													<div
-														class="select-bordered select flex w-full items-center bg-base-100 select-sm"
-													>
-														{question.answer}
-													</div>
-												{:else if question.type === 'radio'}
-													<div class="rounded bg-base-100 p-3">
-														<span class="text-sm font-medium">{question.answer}</span>
-													</div>
-												{:else if question.type === 'checkbox'}
-													<div class="rounded bg-base-100 p-3">
-														<div class="space-y-2">
-															{#each Array.isArray(question.answer) ? question.answer : [] as selectedOption}
-																<div class="flex items-center gap-2">
-																	<span class="badge badge-sm badge-primary">✓</span>
-																	<span class="text-sm">{selectedOption}</span>
-																</div>
-															{/each}
+														</span>
+													</label>
+													{#if question.description}
+														<p class="mb-2 text-sm text-base-content/60">{question.description}</p>
+													{/if}
+
+													{#if question.type === 'text' || question.type === 'date' || question.type === 'datetime-local'}
+														<div
+															class="input-bordered input input-sm flex w-full items-center bg-base-100"
+														>
+															{#if question.type === 'datetime-local'}
+																{#if typeof question.answer === 'string' && question.answer}
+																	{new Date(question.answer).toLocaleString()}
+																{:else}
+																	<span class="text-sm text-base-content/60">Invalid date</span>
+																{/if}
+															{:else if Array.isArray(question.answer)}
+																{question.answer.join(', ')}
+															{:else}
+																{question.answer}
+															{/if}
 														</div>
-													</div>
-												{/if}
+													{:else if question.type === 'textarea'}
+														<div
+															class="textarea-bordered textarea min-h-20 w-full bg-base-100 textarea-sm whitespace-pre-line"
+														>
+															{question.answer}
+														</div>
+													{:else if question.type === 'select'}
+														<div
+															class="select-bordered select flex w-full items-center bg-base-100 select-sm"
+														>
+															{question.answer}
+														</div>
+													{:else if question.type === 'radio'}
+														<div class="rounded bg-base-100 p-3">
+															<span class="text-sm font-medium">{question.answer}</span>
+														</div>
+													{:else if question.type === 'checkbox'}
+														<div class="rounded bg-base-100 p-3">
+															<div class="space-y-2">
+																{#each Array.isArray(question.answer) ? question.answer : [] as selectedOption}
+																	<div class="flex items-center gap-2">
+																		<span class="badge badge-sm badge-primary">✓</span>
+																		<span class="text-sm">{selectedOption}</span>
+																	</div>
+																{/each}
+															</div>
+														</div>
+													{/if}
+												</div>
 											</div>
 										</div>
-									</div>
-								{/each}
-							</div>
-						{/each}
+									{/each}
+								</div>
+							{/each}
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	{/if}
+		{/if}
 
-	<!-- Chat Panel -->
-	<div class="lg:col-span-1">
-		<div class="card h-full bg-base-100 shadow-xl">
-			<div class="card-header">
-				<div class="flex items-center justify-between border-b border-base-300 p-4">
-					<h2 class="text-lg font-semibold">Team Chat</h2>
-					<div class="flex items-center gap-2">
-						<span class="badge badge-sm badge-primary">{chatMessages.length}</span>
+		<!-- Chat Panel -->
+		<div class="flex min-h-0 flex-col lg:col-span-1">
+			<div class="card flex min-h-0 flex-1 flex-col bg-base-100 shadow-xl">
+				<div class="card-header flex-shrink-0">
+					<div class="flex items-center justify-between border-b border-base-300 p-4">
+						<h2 class="text-lg font-semibold">Team Chat</h2>
+						<div class="flex items-center gap-2">
+							<span class="badge badge-sm badge-primary">{chatMessages.length}</span>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- Chat Messages -->
-			<div bind:this={chatContainer} class="h-80 flex-1 space-y-4 overflow-y-auto p-4">
-				{#each chatMessages as message (message.id)}
-					<div class="chat {message.user === currentUser ? 'chat-end' : 'chat-start'}">
-						<div class="avatar chat-image">
-							<div
-								class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs text-primary-content"
-							>
-								{message.avatar || message.user.charAt(0)}
+				<!-- Chat Messages -->
+				<div bind:this={chatContainer} class="min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
+					{#each chatMessages as message (message.id)}
+						<div class="chat {message.user === currentUser ? 'chat-end' : 'chat-start'}">
+							<div class="avatar chat-image">
+								<div
+									class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs text-primary-content"
+								>
+									{message.avatar || message.user.charAt(0)}
+								</div>
+							</div>
+							<div class="chat-header text-xs opacity-70">
+								{message.user}
+								<time class="ml-1">{formatTimestamp(message.timestamp)}</time>
+							</div>
+							<div class="chat-bubble {message.user === currentUser ? 'chat-bubble-primary' : ''}">
+								{message.message}
 							</div>
 						</div>
-						<div class="chat-header text-xs opacity-70">
-							{message.user}
-							<time class="ml-1">{formatTimestamp(message.timestamp)}</time>
-						</div>
-						<div class="chat-bubble {message.user === currentUser ? 'chat-bubble-primary' : ''}">
-							{message.message}
-						</div>
-					</div>
-				{/each}
+					{/each}
 
-				{#if typingUsers.length > 0}
-					<div class="chat-start chat">
-						<div class="avatar chat-image">
-							<div class="flex h-8 w-8 items-center justify-center rounded-full bg-base-300">
-								<span class="loading loading-xs loading-dots"></span>
+					{#if typingUsers.length > 0}
+						<div class="chat-start chat">
+							<div class="avatar chat-image">
+								<div class="flex h-8 w-8 items-center justify-center rounded-full bg-base-300">
+									<span class="loading loading-xs loading-dots"></span>
+								</div>
+							</div>
+							<div class="chat-bubble bg-base-200 text-base-content">
+								<span class="loading loading-sm loading-dots"></span>
 							</div>
 						</div>
-						<div class="chat-bubble bg-base-200 text-base-content">
-							<span class="loading loading-sm loading-dots"></span>
-						</div>
-					</div>
-				{/if}
-			</div>
+					{/if}
+				</div>
 
-			<!-- Chat Input -->
-			<div class="card-actions border-t border-base-300 p-4">
-				<div class="flex w-full gap-2">
-					<textarea
-						bind:value={newMessage}
-						on:keypress={handleKeyPress}
-						class="textarea-bordered textarea h-12 flex-1 resize-none"
-						placeholder="Type a message... (Enter to send)"
-						rows="1"
-					></textarea>
-					<!-- svelte-ignore a11y_consider_explicit_label -->
-					<button
-						class="btn btn-square btn-primary"
-						on:click={sendMessage}
-						disabled={!newMessage.trim()}
-					>
-						<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-							/>
-						</svg>
-					</button>
+				<!-- Chat Input -->
+				<div class="card-actions flex-shrink-0 border-t border-base-300 p-4">
+					<div class="flex w-full gap-2">
+						<textarea
+							bind:value={newMessage}
+							on:keypress={handleKeyPress}
+							class="textarea-bordered textarea h-12 flex-1 resize-none"
+							placeholder="Type a message... (Enter to send)"
+							rows="1"
+						></textarea>
+						<!-- svelte-ignore a11y_consider_explicit_label -->
+						<button
+							class="btn btn-square btn-primary"
+							on:click={sendMessage}
+							disabled={!newMessage.trim()}
+						>
+							<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+								/>
+							</svg>
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-
-<!-- Bottom Actions -->
-<div class="mt-6 flex justify-between">
-	<button class="btn btn-ghost" on:click={() => history.back()}>
-		<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M10 19l-7-7m0 0l7-7m7 7h18"
-			/>
-		</svg>
-		Back
-	</button>
-
-	<div class="flex gap-2">
-		<button class="btn btn-outline" on:click={() => {}}>
-			<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-				/>
-			</svg>
-			Export Report
-		</button>
-		<button class="btn btn-outline">
-			<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
-				/>
-			</svg>
-			Share
-		</button>
-		<button class="btn btn-primary">
-			<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-				/>
-			</svg>
-			Update Status
-		</button>
+	<!-- Fixed Footer -->
+	<div class="flex-shrink-0 border-t border-base-300 bg-base-100 p-4">
+		<div class="flex justify-between">
+			<div class="flex gap-2">
+				<button class="btn btn-outline" on:click={() => {}}>
+					<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+						/>
+					</svg>
+					Export Report
+				</button>
+				<button class="btn btn-outline">
+					<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+						/>
+					</svg>
+					Share
+				</button>
+				<button class="btn btn-primary">
+					<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+						/>
+					</svg>
+					Update Status
+				</button>
+			</div>
+		</div>
 	</div>
 </div>
