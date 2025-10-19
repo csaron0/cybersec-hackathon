@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { 
-		getAllIncidentTypes, 
-		addIncidentType, 
-		updateIncidentType, 
+	import {
+		getAllIncidentTypes,
+		addIncidentType,
+		updateIncidentType,
 		deleteIncidentType as removeIncidentType,
 		type IncidentType,
 		type FormField,

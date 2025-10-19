@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { getActiveIncidentsWithStatus, getStatusColor } from '$lib/stores/incidents';
+	import IncidentClockWidget from '$lib/components/IncidentClockWidget.svelte';
 
 	onMount(() => {
 		const email = localStorage.getItem('email');
@@ -256,7 +257,7 @@
 
 							<div class="flex items-center gap-2">
 								<svg
-									class="h-5 w-5 text-base-content/50"
+									class="h-4 w-4 text-base-content/50"
 									fill="none"
 									viewBox="0 0 24 24"
 									stroke="currentColor"

@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation';
 	import DocxEditor from '$lib/components/DocxEditor.svelte';
 	import IncidentWorkflow from '$lib/components/IncidentWorkflow.svelte';
+	import IncidentClock from '$lib/components/IncidentClock.svelte';
 	import {
 		getIncidentById,
 		getStatusName,
@@ -317,13 +318,35 @@ Process: ContainerUpdate.exe (malicious payload)
 
 <!-- Header -->
 <div class="mb-6">
-	<div class="flex items-center justify-between">
-		<div>
-			<h1 class="text-2xl font-bold">{incident.title}</h1>
+	<div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
+		<!-- Incident Info -->
+		<div class="lg:col-span-2">
+			<div class="flex items-center justify-between">
+				<div>
+					<h1 class="text-2xl font-bold">{incident.title}</h1>
+					<div class="mt-2 flex items-center gap-3">
+						<span class="badge badge-primary">#{incident.id}</span>
+						<span
+							class="badge {incident.priority === 'Critical'
+								? 'badge-error'
+								: incident.priority === 'High'
+									? 'badge-warning'
+									: 'badge-info'}">{incident.priority}</span
+						>
+						<span class="text-sm text-base-content/70">Assigned to {incident.assignee}</span>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="text-right">
-			<div class="text-sm text-base-content/70">Assigned to</div>
-			<div class="font-medium">{incident.assignee}</div>
+
+		<!-- Incident Clock -->
+		<div class="flex justify-center lg:justify-end">
+			<IncidentClock
+				discoveryTime={incident.created}
+				size="md"
+				criticalThresholdHours={24}
+				warningThresholdHours={8}
+			/>
 		</div>
 	</div>
 </div>

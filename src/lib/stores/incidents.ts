@@ -1,6 +1,13 @@
 // Incident data store and helper functions
 // This ensures consistency across all pages that use incident data
 
+// Helper to create recent timestamps
+const getTwoHoursAgo = () => new Date(Date.now() - 2 * 60 * 60 * 1000);
+const getOneHourAgo = () => new Date(Date.now() - 1 * 60 * 60 * 1000);
+const getThreeHoursAgo = () => new Date(Date.now() - 3 * 60 * 60 * 1000);
+const getFourHoursAgo = () => new Date(Date.now() - 4 * 60 * 60 * 1000);
+const getSixHoursAgo = () => new Date(Date.now() - 6 * 60 * 60 * 1000);
+
 export interface Question {
     id: string;
     title: string;
@@ -32,7 +39,7 @@ export const incidents: Record<string, Incident> = {
         statusIndex: 1,
         priority: 'Critical',
         assignee: 'Maritime Security Team',
-        created: new Date('2024-10-19T06:45:00'),
+        created: getTwoHoursAgo(),
         type: 'malware',
         description:
             'Wiper malware affecting critical port logistics systems. Container operations disrupted, multilingual stakeholder communications coordinated.',
@@ -241,7 +248,7 @@ export const incidents: Record<string, Incident> = {
         statusIndex: 3, // Communications Drafting
         priority: 'High',
         assignee: 'Jane Smith',
-        created: new Date('2024-10-17T11:15:00'),
+        created: getOneHourAgo(),
         type: 'phishing',
         description:
             'Employees reported suspicious emails claiming to be from HR with malicious attachments.'
@@ -252,7 +259,7 @@ export const incidents: Record<string, Incident> = {
         statusIndex: 2, // Legal & Regulatory Assessment
         priority: 'Critical',
         assignee: 'Security Team Beta',
-        created: new Date('2024-10-17T14:20:00'),
+        created: getThreeHoursAgo(),
         type: 'data-breach',
         description: 'Unauthorized access detected to customer database. Investigation ongoing.'
     },
@@ -262,7 +269,7 @@ export const incidents: Record<string, Incident> = {
         statusIndex: 4, // Management Approval
         priority: 'High',
         assignee: 'Network Team',
-        created: new Date('2024-10-18T07:45:00'),
+        created: getFourHoursAgo(),
         type: 'ddos',
         description: 'Large-scale distributed denial of service attack targeting our web services.'
     },
@@ -272,7 +279,7 @@ export const incidents: Record<string, Incident> = {
         statusIndex: 7, // Post-Incident Review & Closure
         priority: 'Medium',
         assignee: 'Security Team Alpha',
-        created: new Date('2024-10-18T10:20:00'),
+        created: getSixHoursAgo(),
         type: 'insider-threat',
         description: 'Investigation completed. No malicious activity found.'
     }
