@@ -1,6 +1,17 @@
 // Incident data store and helper functions
 // This ensures consistency across all pages that use incident data
 
+export interface Question {
+    id: string;
+    title: string;
+    description?: string;
+    type: 'text' | 'textarea' | 'select' | 'radio' | 'checkbox' | 'date' | 'datetime-local';
+    required: boolean;
+    options?: string[];
+    answer: string | string[];
+    width?: 'full' | 'half' | 'third';
+}
+
 export interface Incident {
     id: string;
     title: string;
@@ -10,6 +21,7 @@ export interface Incident {
     created: Date;
     type: string;
     description: string;
+    questionRows?: Question[][];
 }
 
 // Centralized incident data
@@ -23,7 +35,205 @@ export const incidents: Record<string, Incident> = {
         created: new Date('2024-10-19T06:45:00'),
         type: 'malware',
         description:
-            'Wiper malware affecting critical port logistics systems. Container operations disrupted, multilingual stakeholder communications coordinated.'
+            'Wiper malware affecting critical port logistics systems. Container operations disrupted, multilingual stakeholder communications coordinated.',
+        questionRows: [
+            // Row 1: Discovery basics
+            [
+                {
+                    id: 'discovery_time',
+                    title: 'When discovered?',
+                    type: 'datetime-local',
+                    required: true,
+                    answer: '2024-10-19T06:45',
+                    width: 'half'
+                },
+                {
+                    id: 'incident_discovery',
+                    title: 'How discovered?',
+                    type: 'select',
+                    required: true,
+                    options: [
+                        'User report',
+                        'Antivirus alert',
+                        'Performance issues',
+                        'System failure',
+                        'Monitoring alert',
+                        'Other'
+                    ],
+                    answer: 'Monitoring alert',
+                    width: 'half'
+                }
+            ],
+            // Row 2: Systems and impact
+            [
+                {
+                    id: 'affected_systems',
+                    title: 'Affected systems',
+                    description: 'List compromised systems/devices',
+                    type: 'textarea',
+                    required: true,
+                    answer:
+                        '• Terminal Operating System (TOS) - Container tracking affected\n• Port Community System (PCS) - Cargo clearance disrupted\n• Vessel Traffic Management System (VTMS) - Ship scheduling impacted\n• Cargo Handling Equipment Control - 12 cranes offline\n• Gate Access Control Systems - Entry/exit processing delayed',
+                    width: 'full'
+                }
+            ],
+            // Row 3: Malware details
+            [
+                {
+                    id: 'malware_type',
+                    title: 'Malware type detected',
+                    type: 'select',
+                    required: true,
+                    options: ['Ransomware', 'Wiper malware', 'Trojan', 'Rootkit', 'Unknown', 'Multiple types'],
+                    answer: 'Wiper malware',
+                    width: 'third'
+                },
+                {
+                    id: 'infection_vector',
+                    title: 'Suspected infection vector',
+                    type: 'select',
+                    required: false,
+                    options: [
+                        'Email attachment',
+                        'USB device',
+                        'Network vulnerability',
+                        'Supply chain',
+                        'Remote access',
+                        'Unknown'
+                    ],
+                    answer: 'Email attachment',
+                    width: 'third'
+                },
+                {
+                    id: 'spread_pattern',
+                    title: 'Spread pattern',
+                    type: 'select',
+                    required: false,
+                    options: ['Lateral movement', 'Targeted systems', 'Random spread', 'Contained', 'Unknown'],
+                    answer: 'Lateral movement',
+                    width: 'third'
+                }
+            ],
+            // Row 4: Operational impact
+            [
+                {
+                    id: 'port_operations',
+                    title: 'Port operations affected',
+                    type: 'checkbox',
+                    required: true,
+                    options: [
+                        'Container handling',
+                        'Ship scheduling',
+                        'Cargo clearance',
+                        'Gate operations',
+                        'Fuel services',
+                        'Logistics coordination'
+                    ],
+                    answer: ['Container handling', 'Ship scheduling', 'Cargo clearance', 'Gate operations'],
+                    width: 'half'
+                },
+                {
+                    id: 'vessels_impacted',
+                    title: 'Vessels currently impacted',
+                    type: 'text',
+                    required: true,
+                    answer: '23 container ships, 8 bulk carriers awaiting clearance',
+                    width: 'half'
+                }
+            ],
+            // Row 5: Response actions
+            [
+                {
+                    id: 'systems_isolated',
+                    title: 'Systems isolated?',
+                    type: 'radio',
+                    required: true,
+                    options: [
+                        'Fully isolated',
+                        'Critical systems only',
+                        'Partial isolation',
+                        'No isolation',
+                        'Unknown'
+                    ],
+                    answer: 'Critical systems only',
+                    width: 'half'
+                },
+                {
+                    id: 'backup_systems',
+                    title: 'Backup systems status',
+                    type: 'select',
+                    required: true,
+                    options: [
+                        'Fully operational',
+                        'Partially operational',
+                        'Manual procedures only',
+                        'No backup systems',
+                        'Under assessment'
+                    ],
+                    answer: 'Manual procedures only',
+                    width: 'half'
+                }
+            ],
+            // Row 6: Communication requirements
+            [
+                {
+                    id: 'stakeholder_notifications',
+                    title: 'Stakeholder notifications required',
+                    type: 'checkbox',
+                    required: true,
+                    options: [
+                        'Port customers',
+                        'Shipping lines',
+                        'Customs authorities',
+                        'Media/Press',
+                        'Government agencies',
+                        'International partners'
+                    ],
+                    answer: ['Port customers', 'Shipping lines', 'Customs authorities', 'Media/Press'],
+                    width: 'full'
+                }
+            ],
+            // Row 7: Multilingual requirements
+            [
+                {
+                    id: 'languages_required',
+                    title: 'Languages for communications',
+                    type: 'checkbox',
+                    required: true,
+                    options: ['Dutch', 'English', 'German', 'French', 'Chinese', 'Spanish'],
+                    answer: ['Dutch', 'English', 'German'],
+                    width: 'half'
+                },
+                {
+                    id: 'priority_communications',
+                    title: 'Priority communication channels',
+                    type: 'select',
+                    required: true,
+                    options: [
+                        'Press release',
+                        'Customer portal',
+                        'Direct notifications',
+                        'Social media',
+                        'All channels'
+                    ],
+                    answer: 'All channels',
+                    width: 'half'
+                }
+            ],
+            // Row 8: Business impact
+            [
+                {
+                    id: 'business_impact',
+                    title: 'Operational and economic impact',
+                    description: 'Describe current and projected impact on port operations',
+                    type: 'textarea',
+                    required: true,
+                    answer:
+                        "Severe disruption to Europe's largest port operations. Container throughput reduced by 75%. Ship delays causing supply chain disruptions across Netherlands, Germany, and Belgium. Estimated economic impact: €15M per day. 31 vessels currently waiting for berths. Manual cargo processing causing 4-6 hour delays. Media attention requiring coordinated multilingual response.",
+                    width: 'full'
+                }
+            ]
+        ]
     },
     '2': {
         id: '2',
@@ -183,4 +393,10 @@ export function getActiveIncidentsWithStatus(): (Incident & { statusName: string
         ...incident,
         statusName: getStatusName(incident.statusIndex)
     }));
+}
+
+// Helper to get initial report data for an incident
+export function getInitialReportData(id: string): Question[][] | undefined {
+    const incident = getIncidentById(id);
+    return incident?.questionRows;
 }
