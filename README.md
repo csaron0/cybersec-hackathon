@@ -6,17 +6,6 @@ A modern incident management and security operations platform built with SvelteK
 
 BoboLink is a comprehensive security dashboard designed for incident response teams to efficiently manage, track, and resolve security incidents. Built with SvelteKit and styled with daisyUI.
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```sh
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
 
 ## Developing
 
@@ -38,5 +27,3 @@ npm run build
 ```
 
 You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
