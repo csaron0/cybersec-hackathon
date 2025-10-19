@@ -198,7 +198,7 @@
 <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
 	<!-- Incident Types List -->
 	<div class="lg:col-span-2">
-		<div class="card bg-base-100 shadow-xl">
+		<div class="card bg-base-200 shadow-xl">
 			<div class="card-header">
 				<div class="flex items-center justify-between border-b border-base-300 p-4">
 					<h2 class="text-xl font-semibold">Incident Types</h2>
@@ -318,7 +318,7 @@
 
 	<!-- Quick Setup Guide -->
 	<div class="lg:col-span-1">
-		<div class="card bg-base-100 shadow-xl">
+		<div class="card bg-base-200 shadow-xl">
 			<div class="card-header">
 				<div class="border-b border-base-300 p-4">
 					<h2 class="text-xl font-semibold">Quick Setup Guide</h2>

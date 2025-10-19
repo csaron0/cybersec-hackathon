@@ -374,13 +374,29 @@ Process: ContainerUpdate.exe (malicious payload)
 			class="tab-lg tab {activeTab === 'documentation' ? 'tab-active' : ''}"
 			on:click={() => (activeTab = 'documentation')}
 		>
-			📋 Incident Documentation
+			<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+				/>
+			</svg>
+			Incident Documentation
 		</button>
 		<button
 			class="tab-lg tab {activeTab === 'initial-report' ? 'tab-active' : ''}"
 			on:click={() => (activeTab = 'initial-report')}
 		>
-			📝 Initial Report
+			<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+				/>
+			</svg>
+			Initial Report
 		</button>
 	</div>
 </div>
@@ -587,57 +603,12 @@ Process: ContainerUpdate.exe (malicious payload)
 							on:click={sendMessage}
 							disabled={!newMessage.trim()}
 						>
-							<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-								/>
+							<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+								<path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
 							</svg>
 						</button>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-	<!-- Fixed Footer -->
-	<div class="flex-shrink-0 border-t border-base-300 bg-base-100 p-4">
-		<div class="flex justify-between">
-			<div class="flex gap-2">
-				<button class="btn btn-outline" on:click={() => {}}>
-					<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-						/>
-					</svg>
-					Export Report
-				</button>
-				<button class="btn btn-outline">
-					<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
-						/>
-					</svg>
-					Share
-				</button>
-				<button class="btn btn-primary">
-					<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-						/>
-					</svg>
-					Update Status
-				</button>
 			</div>
 		</div>
 	</div>

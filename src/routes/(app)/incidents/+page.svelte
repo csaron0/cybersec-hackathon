@@ -117,7 +117,7 @@
 	</div>
 
 	<!-- Filters -->
-	<div class="card mb-6 bg-base-100 shadow-lg">
+	<div class="card mb-6 bg-base-200 shadow-lg">
 		<div class="card-body">
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-4">
 				<!-- Search -->
@@ -197,7 +197,7 @@
 		<div class="space-y-4">
 			{#each filteredIncidents as incident}
 				<div
-					class="card cursor-pointer bg-base-100 shadow-lg transition-all hover:scale-[1.01] hover:shadow-xl"
+					class="card cursor-pointer bg-base-200 shadow-lg transition-all hover:scale-[1.01] hover:shadow-xl"
 					on:click={() => handleActiveIncidentClick(incident.id)}
 					on:keydown={(e) => e.key === 'Enter' && handleActiveIncidentClick(incident.id)}
 					role="button"
@@ -276,7 +276,7 @@
 			{/each}
 		</div>
 	{:else}
-		<div class="card bg-base-100 py-12 text-center shadow-lg">
+		<div class="card bg-base-200 py-12 text-center shadow-lg">
 			<div class="card-body">
 				<div class="mb-4">
 					<svg
