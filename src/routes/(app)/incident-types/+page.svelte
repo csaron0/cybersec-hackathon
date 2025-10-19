@@ -1,171 +1,18 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
-	// Types
-	interface PersonnelAssignment {
-		id: string;
-		name: string;
-		role: string;
-		department: string;
-		email: string;
-		phone: string;
-		alertLevel: 'immediate' | 'urgent' | 'standard';
-	}
-
-	interface FormField {
-		id: string;
-		title: string;
-		description: string;
-		type: 'text' | 'textarea' | 'select' | 'radio' | 'checkbox' | 'date' | 'datetime-local';
-		required: boolean;
-		options?: string[];
-	}
-
-	interface IncidentType {
-		id: string;
-		name: string;
-		description: string;
-		severity: 'Critical' | 'High' | 'Medium' | 'Low';
-		icon: string;
-		color: string;
-		formFields: FormField[];
-		draftTemplate: string;
-		personnel: PersonnelAssignment[];
-		autoAlerts: boolean;
-		slaHours: number;
-		created: Date;
-		lastModified: Date;
-	}
+	import { 
+		getAllIncidentTypes, 
+		addIncidentType, 
+		updateIncidentType, 
+		deleteIncidentType as removeIncidentType,
+		type IncidentType,
+		type FormField,
+		type PersonnelAssignment,
+		type Severity
+	} from '$lib/stores/incidentTypes';
 
 	// State
-	let incidentTypes: IncidentType[] = [
-		{
-			id: '1',
-			name: 'Ransomware Attack',
-			description: 'Malicious encryption of systems and data with ransom demands',
-			severity: 'Critical',
-			icon: '🔒',
-			color: 'error',
-			formFields: [
-				{
-					id: 'discovery_method',
-					title: 'How was the ransomware discovered?',
-					description: 'Describe how you first became aware of the attack',
-					type: 'select',
-					required: true,
-					options: [
-						'User reported encrypted files',
-						'Antivirus alert',
-						'System monitoring',
-						'Ransom note'
-					]
-				},
-				{
-					id: 'affected_systems',
-					title: 'Which systems are affected?',
-					description: 'List all compromised systems and devices',
-					type: 'textarea',
-					required: true
-				}
-			],
-			draftTemplate: `# Ransomware Incident Response
-
-## Executive Summary
-[Brief overview of the ransomware attack]
-
-## Incident Details
-- **Discovery Time**: [When was it discovered]
-- **Affected Systems**: [List of impacted systems]
-- **Ransom Demand**: [Amount and payment method]
-
-## Immediate Actions
-- [ ] Isolate affected systems
-- [ ] Preserve evidence
-- [ ] Notify stakeholders
-- [ ] Assess backup integrity
-
-## Communication Plan
-[Stakeholder notification strategy]`,
-			personnel: [
-				{
-					id: '1',
-					name: 'Mike Johnson',
-					role: 'Security Team Lead',
-					department: 'IT Security',
-					email: 'mike.johnson@bobolink.com',
-					phone: '+1-555-0101',
-					alertLevel: 'immediate'
-				},
-				{
-					id: '2',
-					name: 'Sarah Wilson',
-					role: 'IT Director',
-					department: 'Information Technology',
-					email: 'sarah.wilson@bobolink.com',
-					phone: '+1-555-0102',
-					alertLevel: 'immediate'
-				}
-			],
-			autoAlerts: true,
-			slaHours: 2,
-			created: new Date('2024-10-15'),
-			lastModified: new Date('2024-10-17')
-		},
-		{
-			id: '2',
-			name: 'Data Breach',
-			description: 'Unauthorized access to sensitive or confidential data',
-			severity: 'Critical',
-			icon: '🛡️',
-			color: 'error',
-			formFields: [
-				{
-					id: 'breach_type',
-					title: 'Type of data breach',
-					description: 'What type of data was potentially compromised',
-					type: 'checkbox',
-					required: true,
-					options: [
-						'Customer data',
-						'Employee records',
-						'Financial data',
-						'Healthcare records',
-						'Other'
-					]
-				}
-			],
-			draftTemplate: `# Data Breach Incident Response
-
-## Incident Overview
-[Description of the breach]
-
-## Data Assessment
-- **Type of Data**: [What data was accessed]
-- **Number of Records**: [Estimated volume]
-- **Data Sensitivity**: [Classification level]
-
-## Legal and Compliance
-- [ ] Notify legal team
-- [ ] Review regulatory requirements
-- [ ] Prepare breach notifications`,
-			personnel: [
-				{
-					id: '3',
-					name: 'Legal Team',
-					role: 'Legal Counsel',
-					department: 'Legal',
-					email: 'legal@bobolink.com',
-					phone: '+1-555-0200',
-					alertLevel: 'immediate'
-				}
-			],
-			autoAlerts: true,
-			slaHours: 1,
-			created: new Date('2024-10-10'),
-			lastModified: new Date('2024-10-16')
-		}
-	];
-
+	let incidentTypes: IncidentType[] = getAllIncidentTypes();
 	let showCreateModal = false;
 	let editingType: IncidentType | null = null;
 	let activeTab = 'overview';
@@ -174,8 +21,9 @@
 	let formData = {
 		name: '',
 		description: '',
-		severity: 'Medium' as 'Critical' | 'High' | 'Medium' | 'Low',
+		severity: 'Medium' as Severity,
 		icon: '⚠️',
+		iconEmoji: '⚠️',
 		color: 'warning',
 		autoAlerts: true,
 		slaHours: 4
@@ -188,6 +36,7 @@
 			description: '',
 			severity: 'Medium',
 			icon: '⚠️',
+			iconEmoji: '⚠️',
 			color: 'warning',
 			autoAlerts: true,
 			slaHours: 4
@@ -201,7 +50,8 @@
 			name: type.name,
 			description: type.description,
 			severity: type.severity,
-			icon: type.icon,
+			icon: type.iconEmoji,
+			iconEmoji: type.iconEmoji,
 			color: type.color,
 			autoAlerts: type.autoAlerts,
 			slaHours: type.slaHours
@@ -212,24 +62,40 @@
 	function saveIncidentType() {
 		if (editingType) {
 			// Update existing
-			const index = incidentTypes.findIndex((t) => t.id === editingType!.id);
-			incidentTypes[index] = {
-				...editingType,
-				...formData,
-				lastModified: new Date()
-			};
+			const updated = updateIncidentType(editingType.id, {
+				name: formData.name,
+				title: formData.name, // Keep title in sync with name
+				description: formData.description,
+				severity: formData.severity,
+				urgency: formData.severity, // Keep urgency in sync with severity
+				urgencyClass: getSeverityClass(formData.severity),
+				iconEmoji: formData.iconEmoji,
+				color: formData.color,
+				autoAlerts: formData.autoAlerts,
+				slaHours: formData.slaHours
+			});
+			if (updated) {
+				incidentTypes = getAllIncidentTypes(); // Refresh the list
+			}
 		} else {
 			// Create new
-			const newType: IncidentType = {
-				id: Date.now().toString(),
-				...formData,
+			const newType = addIncidentType({
+				name: formData.name,
+				title: formData.name,
+				description: formData.description,
+				severity: formData.severity,
+				urgency: formData.severity,
+				urgencyClass: getSeverityClass(formData.severity),
+				icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z', // Default icon
+				iconEmoji: formData.iconEmoji,
+				color: formData.color,
 				formFields: [],
 				draftTemplate: `# ${formData.name} Incident Response\n\n## Overview\n[Incident description]\n\n## Response Actions\n- [ ] Initial assessment\n- [ ] Containment measures\n- [ ] Investigation\n- [ ] Recovery planning`,
 				personnel: [],
-				created: new Date(),
-				lastModified: new Date()
-			};
-			incidentTypes = [...incidentTypes, newType];
+				autoAlerts: formData.autoAlerts,
+				slaHours: formData.slaHours
+			});
+			incidentTypes = getAllIncidentTypes(); // Refresh the list
 		}
 		showCreateModal = false;
 		editingType = null;
@@ -237,7 +103,10 @@
 
 	function deleteIncidentType(id: string) {
 		if (confirm('Are you sure you want to delete this incident type?')) {
-			incidentTypes = incidentTypes.filter((t) => t.id !== id);
+			const success = removeIncidentType(id);
+			if (success) {
+				incidentTypes = getAllIncidentTypes(); // Refresh the list
+			}
 		}
 	}
 
@@ -343,7 +212,7 @@
 							<div class="card-body">
 								<div class="mb-4 flex items-start justify-between">
 									<div class="flex items-center gap-3">
-										<div class="text-2xl">{type.icon}</div>
+										<div class="text-2xl">{type.iconEmoji}</div>
 										<div>
 											<h3 class="text-lg font-bold">{type.name}</h3>
 											<p class="text-sm text-base-content/70">{type.description}</p>
@@ -569,13 +438,13 @@
 
 				<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
 					<div class="form-control">
-						<label class="label" for="icon">
-							<span class="label-text">Icon</span>
+						<label class="label" for="iconEmoji">
+							<span class="label-text">Icon Emoji</span>
 						</label>
 						<input
-							id="icon"
+							id="iconEmoji"
 							type="text"
-							bind:value={formData.icon}
+							bind:value={formData.iconEmoji}
 							class="input-bordered input"
 							placeholder="🔒"
 						/>

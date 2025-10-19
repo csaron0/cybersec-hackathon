@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { getAllIncidentTypes } from '$lib/stores/incidentTypes';
 
 	onMount(() => {
 		const email = localStorage.getItem('email');
@@ -15,79 +16,8 @@
 		lastLogin: new Date('2024-10-17T08:30:00').toLocaleDateString()
 	};
 
-	// Incident types with descriptions and icons
-	const incidentTypes = [
-		{
-			id: 'ransomware',
-			title: 'Ransomware Attack',
-			description:
-				'Report incidents involving file encryption, ransom demands, or suspected ransomware activity.',
-			icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
-			urgency: 'Critical',
-			urgencyClass: 'badge-error'
-		},
-		{
-			id: 'phishing',
-			title: 'Phishing Attack',
-			description:
-				'Report suspicious emails, fake websites, or social engineering attempts targeting credentials.',
-			icon: 'M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
-			urgency: 'High',
-			urgencyClass: 'badge-warning'
-		},
-		{
-			id: 'malware',
-			title: 'Malware Infection',
-			description:
-				'Report suspected malware, viruses, trojans, or any malicious software on systems.',
-			icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
-			urgency: 'High',
-			urgencyClass: 'badge-warning'
-		},
-		{
-			id: 'data-breach',
-			title: 'Data Breach',
-			description: 'Report unauthorized access, data theft, or exposure of sensitive information.',
-			icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
-			urgency: 'Critical',
-			urgencyClass: 'badge-error'
-		},
-		{
-			id: 'ddos',
-			title: 'DDoS Attack',
-			description:
-				'Report distributed denial of service attacks or unusual traffic patterns affecting services.',
-			icon: 'M13 10V3L4 14h7v7l9-11h-7z',
-			urgency: 'High',
-			urgencyClass: 'badge-warning'
-		},
-		{
-			id: 'insider-threat',
-			title: 'Insider Threat',
-			description:
-				'Report suspicious activities by employees or other authorized users within the organization.',
-			icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
-			urgency: 'Medium',
-			urgencyClass: 'badge-info'
-		},
-		{
-			id: 'system-compromise',
-			title: 'System Compromise',
-			description: 'Report unauthorized access to systems, servers, or network infrastructure.',
-			icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
-			urgency: 'Critical',
-			urgencyClass: 'badge-error'
-		},
-		{
-			id: 'suspicious-activity',
-			title: 'Suspicious Activity',
-			description:
-				'Report any other suspicious behavior, unusual network activity, or potential security concerns.',
-			icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z',
-			urgency: 'Medium',
-			urgencyClass: 'badge-info'
-		}
-	];
+	// Get incident types from centralized store
+	const incidentTypes = getAllIncidentTypes();
 
 	function handleIncidentTypeClick(incidentType: string) {
 		// Navigate to initial report page with incident type as query parameter
